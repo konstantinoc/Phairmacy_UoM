@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -90,12 +91,17 @@ public class ProductGUI extends JPanel {
 		
 		JLabel lblEdit = new JLabel("");
 		lblEdit.setIcon(new ImageIcon(ProductGUI.class.getResource("/icons/pencil.png")));
-		lblEdit.setBounds(657, 264, 32, 39);
+		lblEdit.setBounds(660, 264, 32, 39);
 		
 		JLabel lblSave = new JLabel("");
 		lblSave.setIcon(new ImageIcon(ProductGUI.class.getResource("/icons/save.png")));
-		lblSave.setBounds(699, 264, 32, 39);
+		lblSave.setBounds(700, 264, 32, 39);
 		lblSave.setEnabled(false);
+		
+		JLabel lblDelete = new JLabel("");
+		lblDelete.setIcon(new ImageIcon(ProductGUI.class.getResource("/icons/delete.png")));
+		lblDelete.setBounds(740, 264, 32, 39);
+		lblDelete.setEnabled(true);
 		
 		if(user.getIsPharmacist() == 1) {
 			txtTitle.setBorder(new LineBorder(Color.black,1));
@@ -108,6 +114,7 @@ public class ProductGUI extends JPanel {
 					
 			add(lblEdit);
 			add(lblSave);
+			add(lblDelete);
 		}
 		
 		MouseListener ms = new MouseListener() {
@@ -129,6 +136,7 @@ public class ProductGUI extends JPanel {
 					txtTitle.setEditable(true);
 					txtPrice.setEditable(true);
 					txtAvailable.setEditable(true);
+					textArea.setEditable(true);
 				}
 				else if (e.getSource().equals(lblSave)) {
 					lblEdit.setEnabled(true);
@@ -137,8 +145,16 @@ public class ProductGUI extends JPanel {
 					txtTitle.setEditable(false);
 					txtPrice.setEditable(false);
 					txtAvailable.setEditable(false);
+					textArea.setEditable(false);
 					
-					product.editProduct(Float.valueOf(txtPrice.getText()), txtTitle.getText(), Integer.valueOf(txtAvailable.getText()));
+					product.editProduct(Float.valueOf(txtPrice.getText()), txtTitle.getText(), Integer.valueOf(txtAvailable.getText()), textArea.getText());
+				}
+				else if(e.getSource().equals(lblDelete)) {
+					int confirm = JOptionPane.showConfirmDialog(parent,"Are you sure you want to delete this product?");  
+					if(confirm == JOptionPane.YES_OPTION){  
+						product.removeProduct();
+						parent.changePanel(new StoreGUI(parent,user));
+					}
 				}
 				
 			}
@@ -168,6 +184,7 @@ public class ProductGUI extends JPanel {
 			
 		};
 		
+		lblDelete.addMouseListener(ms);
 		lblBack.addMouseListener(ms);
 		btnAddCart.addMouseListener(ms);
 		lblEdit.addMouseListener(ms);

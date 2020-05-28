@@ -21,7 +21,16 @@ public class Product {
 		//this.ingredient = ingredient;
 	}
 
-	public void editProduct(float price, String name, int qty) {
+	public Product(float price, String name, int qty, String img, String description) {
+		this.price = price + 0.00F;
+		this.name = name;
+		this.qty = qty;
+		this.img = img;
+		this.description = description;
+		//this.ingredient = ingredient;
+	}
+	
+	public void editProduct(float price, String name, int qty, String description) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
@@ -31,7 +40,7 @@ public class Product {
 			ps.setFloat(1, price);
 			ps.setString(2, name);
 			ps.setInt(3, qty);
-			ps.setString(4, this.description);
+			ps.setString(4, description);
 			ps.setString(5, this.id);
 			
 			ps.executeUpdate();
@@ -41,6 +50,44 @@ public class Product {
 			e.printStackTrace();
 		}
 	}
+	
+	public void addProduct() {
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		
+		try {
+			ps = connection.prepareStatement("INSERT INTO `pharmacy`.`products` (`price`, `name`, `qty`, `description`) VALUES (?, ?, ?, ?);");
+			ps.setFloat(1, this.price);
+			ps.setString(2, this.name);
+			ps.setInt(3, this.qty);
+			ps.setString(4, this.description);
+			
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void removeProduct() {
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		
+		try {
+			ps = connection.prepareStatement("DELETE FROM `pharmacy`.`products` WHERE (`id` = ?);");
+			ps.setString(1, this.id);
+			
+			ps.executeUpdate();
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public String getId() {
 		return id;

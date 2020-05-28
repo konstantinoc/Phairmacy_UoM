@@ -35,57 +35,6 @@ public class StoreGUI extends JPanel {
 		setLayout(null);
 		
 		
-		txtSearch = new JTextField();
-		txtSearch.setText("Search");
-		txtSearch.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		txtSearch.setBackground(null);
-		txtSearch.setBounds(1203, 15, 171, 19);
-		add(txtSearch);
-		txtSearch.setColumns(10);
-		txtSearch.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-		
-		JButton btnNewButton = new JButton();
-		btnNewButton.setBackground(null);
-		btnNewButton.setIcon(new ImageIcon(StoreGUI.class.getResource("/icons/search.png")));
-		btnNewButton.setBounds(1377, 10, 38, 26);
-		add(btnNewButton);
-		
-		
-		MouseListener mouseListener = new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getSource().equals(txtSearch) && txtSearch.getText().equals("Search")) {
-					txtSearch.setText(null);
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				//setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				//setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-			
-		};
-		
-		this.addMouseListener(mouseListener);
-		btnNewButton.addMouseListener(mouseListener);
-		txtSearch.addMouseListener(mouseListener);
-		
 		fetchProducts(1);
 	}
 
@@ -108,6 +57,29 @@ public class StoreGUI extends JPanel {
 		}catch(Exception e) {
 			System.out.println(e);
 		}
+		
+		JLabel lbladdProduct = new JLabel();
+		if(user.getIsPharmacist() == 1) {
+			lbladdProduct.setIcon(new ImageIcon(StoreGUI.class.getResource("/icons/plus.png")));
+			lbladdProduct.setText("Add Product");
+			lbladdProduct.setBounds(10, 10, 120, 35);
+			add(lbladdProduct);
+		}
+		
+		txtSearch = new JTextField();
+		txtSearch.setText("Search");
+		txtSearch.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		txtSearch.setBackground(null);
+		txtSearch.setBounds(1203, 15, 171, 19);
+		add(txtSearch);
+		txtSearch.setColumns(10);
+		txtSearch.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+		
+		JButton btnSearch = new JButton();
+		btnSearch.setBackground(null);
+		btnSearch.setIcon(new ImageIcon(StoreGUI.class.getResource("/icons/search.png")));
+		btnSearch.setBounds(1377, 10, 38, 26);
+		add(btnSearch);
 		
 		int x = 90;
 		for (int product = 0;product < productsList.size();product++ ) {
@@ -181,11 +153,11 @@ public class StoreGUI extends JPanel {
 			add(panel1);
 			
 			x += 270;
-
+			
 			if (page == 1 && productsList.size() == 10) {
 				add(lblNext);
 			}
-			else if (page != 1 && productsList.size() != 10) {
+			else if (page != 1 && productsList.size() < 10) {
 				add(lblBack);
 			}
 			else if (productsList.size() == 10) {
@@ -211,6 +183,12 @@ public class StoreGUI extends JPanel {
 					}
 					else if(e.getSource().equals(lblEditProduct)) {
 						parent.changePanel(new ProductGUI(parent,p,user));
+					}
+					else if(e.getSource().equals(lbladdProduct)) {
+						parent.changePanel(new AddProductGUI(parent,user));
+					}
+					else if(e.getSource().equals(txtSearch) && txtSearch.getText().equals("Search")) {
+						txtSearch.setText(null);
 					}
 				}
 
@@ -241,6 +219,11 @@ public class StoreGUI extends JPanel {
 				}
 				
 			};
+			
+			txtSearch.addMouseListener(ml);
+			btnSearch.addMouseListener(ml);
+			lbladdProduct.addMouseListener(ml);
+			
 			lblNext.addMouseListener(ml);
 			lblBack.addMouseListener(ml);
 			lblAddToCart.addMouseListener(ml);
