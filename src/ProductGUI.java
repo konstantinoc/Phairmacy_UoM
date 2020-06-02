@@ -69,7 +69,20 @@ public class ProductGUI extends JPanel {
 		txtAvailable.setBackground(null);
 		add(txtAvailable);
 		
-		SpinnerModel model = new SpinnerNumberModel(1, 1, 20, 1);
+		int max = 0;
+		int min = 1;
+		int val = 1;
+		if(product.getQty() > 5)
+			max = 5;
+		else if (product.getQty() != 0)
+			max = product.getQty();
+		else {
+			min = 0;
+			val = 0;
+		}
+		
+		
+		SpinnerModel model = new SpinnerNumberModel(val, min, max, 1);
 		JSpinner spinner = new JSpinner(model);
 		spinner.setBounds(706, 168, 35, 25);
 		add(spinner);
@@ -88,6 +101,9 @@ public class ProductGUI extends JPanel {
 		btnAddCart.setFont(new Font("SansSerif", Font.BOLD, 16));
 		btnAddCart.setBounds(694, 223, 129, 31);
 		add(btnAddCart);
+		
+		if(product.getQty() == 0)
+			btnAddCart.setEnabled(false);
 		
 		JLabel lblEdit = new JLabel("");
 		lblEdit.setIcon(new ImageIcon(ProductGUI.class.getResource("/icons/pencil.png")));
@@ -126,8 +142,10 @@ public class ProductGUI extends JPanel {
 					parent.changePanel(new StoreGUI(parent,user));
 				}
 				else if (e.getSource().equals(btnAddCart)) {
-					user.getCart().addProduct(product,(int)spinner.getValue());
-					parent.changePanel(new CartGUI(parent,user));
+					if(btnAddCart.isEnabled()) {
+						user.getCart().addProduct(product,(int)spinner.getValue());
+						parent.changePanel(new CartGUI(parent,user));
+					}
 				}
 				else if (e.getSource().equals(lblEdit)) {
 					lblEdit.setEnabled(false);

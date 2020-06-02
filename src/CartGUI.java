@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -149,12 +150,13 @@ public class CartGUI extends JPanel {
 						try {
 							user.getCart().changeProductQty(currentP,Integer.valueOf(txtQty.getText()));
 							parent.changePanel(new CartGUI(parent,user));
+							JOptionPane.showMessageDialog(parent, "Quantity change succesfuly","Succesful operation", JOptionPane.INFORMATION_MESSAGE);
 						}catch(Exception ex){
 							System.out.println(ex);
 						}
 					}
 					else if(e.getSource().equals(btnPurchaseWithCard)) {
-						parent.changePanel(new PurchaseWithMemberCardGUI(parent,user, new PurchaseWithMemberCard(user)));
+						parent.changePanel(new PurchaseWithMemberCardGUI(parent,user));
 						hideMe();
 					}
 				}

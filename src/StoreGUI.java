@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -52,7 +53,7 @@ public class StoreGUI extends JPanel {
 			ps = connection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()){
-				productsList.add(new Product(rs.getString("id"),rs.getFloat("price"),rs.getString("name"),rs.getInt("qty"),rs.getString("img"), rs.getString("description")));
+				productsList.add(new Product(rs.getInt("id"),rs.getFloat("price"),rs.getString("name"),rs.getInt("qty"),rs.getString("img"), rs.getString("description")));
 			}
 		}catch(Exception e) {
 			System.out.println(e);
@@ -178,8 +179,12 @@ public class StoreGUI extends JPanel {
 						parent.changePanel(new ProductGUI(parent,p,user));
 					}
 					else if(e.getSource().equals(lblAddToCart)) {
-						user.getCart().addProduct(p, 1);
-						parent.changePanel(new CartGUI(parent,user));
+						if(p.getQty()>0) {
+							user.getCart().addProduct(p, 1);
+							JOptionPane.showMessageDialog(parent, "Product added succesfuly","Succesful operation", JOptionPane.INFORMATION_MESSAGE);
+						}else {
+							JOptionPane.showMessageDialog(parent, "Product is out of stock","Out of stock", JOptionPane.ERROR_MESSAGE);
+						}
 					}
 					else if(e.getSource().equals(lblEditProduct)) {
 						parent.changePanel(new ProductGUI(parent,p,user));

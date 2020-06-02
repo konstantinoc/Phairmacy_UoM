@@ -1,12 +1,19 @@
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javax.swing.JOptionPane;
+
 public class PurchaseWithMemberCard {
 	private User user;
+	private PurchaseWithMemberCardGUI gui;
+	private PaymentGUI pmnt;
+	private float[] total;
 	
-	public PurchaseWithMemberCard(User user) {
-		this.user = user;		
+	public PurchaseWithMemberCard(User user, PurchaseWithMemberCardGUI gui) {
+		this.user = user;	
+		this.gui = gui;
 	}
 
 	public User getUser() {
@@ -23,15 +30,22 @@ public class PurchaseWithMemberCard {
 			String query = "SELECT * FROM coupons WHERE code = \"" + code + "\";";
 			ps = connection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
-				
-			while(rs.next()) {
+			
+			int flag = 1;
+			while(rs.next() && flag == 1) {
 				for(int i=0; i<user.getCart().getProductList().size(); i++) {
 					Product current = user.getCart().getProductList().get(i);
-					if(current.getId().equals(rs.getString("product_id"))) {
+					if(current.getId() == rs.getInt("product_id")) {
 						if(user.getCart().getQtyList().get(i) >= rs.getInt("minimum_qty")) {
 							disc += current.getPrice() * user.getCart().getQtyList().get(i) * rs.getFloat("discount");
 						}
-						
+						else {
+							int confirm = JOptionPane.showConfirmDialog(gui,"To use this coupon for " + current.getName() + " you have to add in cart at least " + rs.getInt("minimum_qty") + " pieces\n Do you want to go back to cart?");  
+							if(confirm == JOptionPane.YES_OPTION){  
+								gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(),user));
+								flag = 0;
+							}
+						}
 						break;
 					}
 				}
@@ -64,16 +78,71 @@ public class PurchaseWithMemberCard {
 	public float[] calculateTotal(boolean isRedeemPoints, boolean isDelivery, String code) {
 		float[] total= {0,0,0,0,0};
 		total[0] = user.getCart().calculateTotal();
-		if(isRedeemPoints)
-			total[1] = (float) 2.50;
 		if(codeIsValid(code))
 			total[2] = discountFromCoupon(code);
-		else
+		else {
 			total[2] = (float) 0.00;
+		}
+		if(isRedeemPoints)
+			total[1] = calculateDiscoundFromPoints(total[2]);
 		if(isDelivery)
 			total[3] = (float) 2.50;
 		
-		total[4] = total[0] - total[1] - total[2] + total[3];
+		total[4] = (float)(total[0] - total[1] - total[2] + total[3]);
+		this.total = total;
 		return total;
 	}
+	
+	public float calculateDiscoundFromPoints(float disc) {
+		float total = user.getCart().calculateTotal();
+		int usedPoints = (int) ((total - disc)  / 0.10);
+		return (float) (usedPoints * 0.10);
+	}
+
+	public void callPaymentGui() {
+		this.pmnt = new PaymentGUI(this);
+		gui.getMainFrame().changePanel(pmnt);
+	}
+	
+	public void checkout() {
+		Cart cart = user.getCart();
+		for(int i=0; i<cart.cartSize(); i++) {
+			Product currentProduct = cart.getProductList().get(i);
+			int currentQty = cart.getQtyList().get(i);
+			
+			if(currentProduct.getQty() < currentQty) {
+				JOptionPane.showMessageDialog(gui, "ORDER UNSUCCESFUL\nNo enough quantity in stock!\nAvailable:" + currentProduct.getQty(),"Unsuccesful operation", JOptionPane.ERROR_MESSAGE);
+				gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(),user));
+				break;
+			}
+			else {
+				callPaymentGui();
+				completeOrder();
+				}
+		}
+	}
+	
+	public void completeOrder() {
+		int result = this.pmnt.getResult();
+		Cart cart = user.getCart();
+		if (result == 1) {
+			for (int i=0; i<user.getCart().cartSize(); i++) {
+				Product currentProduct = cart.getProductList().get(i);
+				int currentQty = cart.getQtyList().get(i);
+				currentProduct.setQty(currentProduct.getQty() - currentQty);
+				currentProduct.editQty();
+			}
+			user.setPoints((int) (user.getPoints() + (this.total[4] / 1) - (this.total[1] / 0.10)));
+			user.updateCustomerPoints();
+			user.getCart().removeAll();
+			gui.getMainFrame().RefreshNavMenu();
+			JOptionPane.showMessageDialog(gui, "ORDER SUCCESFUL","Succesful operation", JOptionPane.INFORMATION_MESSAGE);
+			gui.getMainFrame().changePanel(new StoreGUI(gui.getMainFrame(),user));
+		}
+		else if (result == -1) {
+			JOptionPane.showMessageDialog(gui, "ORDER UNSUCCESFUL","Unsuccesful operation", JOptionPane.ERROR_MESSAGE);
+			gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(),user));
+		}
+	}
+	
 }

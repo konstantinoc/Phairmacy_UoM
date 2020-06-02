@@ -15,6 +15,7 @@ public class User {
 	private String birthday;
 	private int isPharmacist;
 	private Cart cart;
+	private int points;
 	
 	public User(String id) {		
 		ResultSet rs = receiveCustomerData(id);
@@ -30,6 +31,7 @@ public class User {
 				this.postal = rs.getString("postal_code");
 				this.phone = rs.getString("phone");
 				this.birthday = rs.getString("date_of_birth");
+				this.points = rs.getInt("points");
 				this.isPharmacist = rs.getInt("isPharmacist");
 			}
 		} catch (SQLException e) {
@@ -52,22 +54,21 @@ public class User {
 		return null;
 	}
 	
-	public void updateCustomerData(String name, String surname, String email, String address, 
-			String city, String postal, String phone, String birthday) {
+	public void updateCustomerData() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
 		try {
-			ps = connection.prepareStatement("UPDATE pharmacy.customers SET name = ?, surname = ?, email = ?, address = ?, city = ?, postal_code = ?, phone = ?, date_of_birth = ? WHERE (user_id = ?);");
-			ps.setString(1, name);
-			ps.setString(2, surname);
-			ps.setString(3, email);
-			ps.setString(4, address);
-			ps.setString(5, city);
-			ps.setString(6, postal);
-			ps.setString(7, phone);
-			ps.setString(8, birthday);
+			ps = connection.prepareStatement("UPDATE pharmacy.customers SET name = ?, surname = ?, email = ?, address = ?, city = ?, postal_code = ?, phone = ?, date_of_birth = ?, points = ? WHERE (user_id = ?);");
+			ps.setString(1, this.name);
+			ps.setString(2, this.surname);
+			ps.setString(3, this.email);
+			ps.setString(4, this.address);
+			ps.setString(5, this.city);
+			ps.setString(6, this.postal);
+			ps.setString(7, this.phone);
+			ps.setString(8, this.birthday);
 			ps.setString(9, this.id);
 
 			ps.executeUpdate();
@@ -77,6 +78,24 @@ public class User {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void updateCustomerPoints() {
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		
+		try {
+			ps = connection.prepareStatement("UPDATE pharmacy.customers SET points = ? WHERE (user_id = ?);");
+			ps.setInt(1, this.points);
+			ps.setString(2, this.id);
+
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 		
 	public String getId() {
@@ -122,6 +141,56 @@ public class User {
 	public Cart getCart() {
 		return cart;
 	}
+
+	public long getPoints() {
+		return points;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public void setPostal(String postal) {
+		this.postal = postal;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+	
+	
 	
 	
 	

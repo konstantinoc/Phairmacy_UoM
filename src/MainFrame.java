@@ -1,5 +1,6 @@
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -17,6 +18,7 @@ import java.awt.Cursor;
 public class MainFrame extends JFrame {
 
 	private JPanel panel;
+	private JPanel panel_1;
 	private Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	private User user;
@@ -33,7 +35,7 @@ public class MainFrame extends JFrame {
 		getContentPane().setLayout(null);
 		setVisible(true);
 				
-		JPanel panel_1 = new NavMenu();
+		panel_1 = new NavMenu();
 		panel_1.setBounds(0, 0, (int) screen.getWidth(), 80);
 		getContentPane().add(panel_1);
 		
@@ -48,6 +50,12 @@ public class MainFrame extends JFrame {
 			changePanel(new StoreGUI(this, user));
 	}
 	
+	public void RefreshNavMenu() {
+		this.remove(panel_1);
+		this.panel_1 = new NavMenu();
+		panel_1.setBounds(0, 0, (int) screen.getWidth(), 80);
+		getContentPane().add(panel_1);
+	}
 	public MainFrame getMe() {
 		return this;
 	}
@@ -90,9 +98,17 @@ public class MainFrame extends JFrame {
 			logout.setBounds((int) (screenSize.getWidth()-50), 10, 32, 64);
 			add(logout);
 			
+			JLabel points = new JLabel(String.valueOf(user.getPoints()));
+			points.setIcon(new ImageIcon(NavMenu.class.getResource("/icons/points.png")));
+			points.setFont(new Font("SansSerif", Font.BOLD, 15));
+			points.setForeground(Color.WHITE);
+			points.setBounds((int) (screenSize.getWidth()-50)-400, 10, 80, 64);
+			add(points);
+			
 			if(user.getIsPharmacist() == 1) {
 				toCart.setVisible(false);
 				toProfile.setBounds((int) (screenSize.getWidth()-50)-90, 10, 32, 64);
+				points.setVisible(false);
 			}
 		
 			MouseListener mouseListener = new MouseListener() {

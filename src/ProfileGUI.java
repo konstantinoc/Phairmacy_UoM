@@ -191,8 +191,15 @@ public class ProfileGUI extends JPanel {
 					txtBirthday.setEditable(false);
 					txtEmail.setEditable(false);
 					
-					user.updateCustomerData(txtName.getText(), txtSurname.getText(), txtEmail.getText(), txtAddress.getText(),
-							txtCity.getText(), txtPostal.getText(), txtPhone.getText(), txtBirthday.getText());
+					user.setName(txtName.getText());
+					user.setSurname(txtSurname.getText());
+					user.setEmail(txtEmail.getText());
+					user.setAddress(txtAddress.getText());
+					user.setCity(txtCity.getText());
+					user.setPostal(txtPostal.getText());
+					user.setPhone(txtPhone.getText());
+					user.setBirthday(txtBirthday.getText());
+					
 				}
 			}
 

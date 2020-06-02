@@ -55,8 +55,9 @@ public class Cart {
 		productList.remove(p);
 	}
 	
-	public PurchaseWithMemberCard continueOrder() {
-		return new PurchaseWithMemberCard(user);
-		
+	public void removeAll() {
+		qtyList.clear();
+		productList.clear();
 	}
+	
 }

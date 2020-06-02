@@ -1,9 +1,10 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Product {
-	private String id;
+	private int id;
 	private float price;
 	private String name;
 	private int qty;
@@ -11,7 +12,7 @@ public class Product {
 	private String description;
 	//private Ingredient ingredient;
 	
-	public Product(String id, float price, String name, int qty, String img, String description) {
+	public Product(int id, float price, String name, int qty, String img, String description) {
 		this.id = id;
 		this.price = price + 0.00F;
 		this.name = name;
@@ -30,6 +31,25 @@ public class Product {
 		//this.ingredient = ingredient;
 	}
 	
+//	public boolean enoughQty(int id, int qty) {
+//		Product p = null;
+//		DB_Connection objDB = new DB_Connection();
+//		Connection connection = objDB.get_connection();
+//		PreparedStatement ps = null;
+//		try {
+//			String query = "SELECT qty FROM products WHERE id = " + id + ";";
+//			ps = connection.prepareStatement(query);
+//			ResultSet rs = ps.executeQuery();
+//			
+//			if(rs.next()) {
+//				
+//			}
+//		}catch(Exception e) {
+//			System.out.println(e);
+//		}
+//		return true;
+//	}
+
 	public void editProduct(float price, String name, int qty, String description) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -41,7 +61,25 @@ public class Product {
 			ps.setString(2, name);
 			ps.setInt(3, qty);
 			ps.setString(4, description);
-			ps.setString(5, this.id);
+			ps.setInt(5, this.id);
+			
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void editQty() {
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		
+		try {
+			ps = connection.prepareStatement("UPDATE products SET qty = ? WHERE (id = ?);");
+			ps.setInt(1, qty);
+			ps.setInt(2, this.id);
 			
 			ps.executeUpdate();
 
@@ -79,7 +117,7 @@ public class Product {
 		
 		try {
 			ps = connection.prepareStatement("DELETE FROM `pharmacy`.`products` WHERE (`id` = ?);");
-			ps.setString(1, this.id);
+			ps.setInt(1, this.id);
 			
 			ps.executeUpdate();
 		}catch (SQLException e) {
@@ -89,7 +127,7 @@ public class Product {
 	}
 	
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -117,8 +155,28 @@ public class Product {
 		return description;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	public boolean equals(Object ob) {
-		if(this.id.equals(((Product)ob).getId()))
+		if(this.id == ((Product)ob).getId())
 			return true;
 		return false;
 	}
