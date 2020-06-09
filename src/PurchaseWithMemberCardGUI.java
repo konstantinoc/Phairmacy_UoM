@@ -38,6 +38,9 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 	private JTextField txtEmail;
 	private JTextField txtBirthday;
 	private JLabel lblTotal;
+	private JCheckBox ckDelivery;
+	private JRadioButton rdbtnCard;
+	private JRadioButton rdbtnCash;
 	
 	private User user;
 	private MainFrame mainFrame;
@@ -193,7 +196,7 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		ckRedeemPoints.setBounds(6, 50, 135, 21);
 		panel2.add(ckRedeemPoints);
 		
-		JCheckBox ckDelivery = new JCheckBox("Delivery");
+		ckDelivery = new JCheckBox("Delivery");
 		ckDelivery.setFont(new Font("SansSerif", Font.BOLD, 15));
 		ckDelivery.setBounds(6, 79, 93, 21);
 		panel2.add(ckDelivery);
@@ -264,17 +267,17 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		lblNewLabel_2_2.setBounds(10, 112, 110, 13);
 		panel2.add(lblNewLabel_2_2);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton();
-		rdbtnNewRadioButton.setBounds(10, 170, 22, 21);
-		panel2.add(rdbtnNewRadioButton);
+		rdbtnCard = new JRadioButton();
+		rdbtnCard.setBounds(10, 170, 22, 21);
+		panel2.add(rdbtnCard);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton();
-		rdbtnNewRadioButton_1.setBounds(10, 207, 22, 21);
-		panel2.add(rdbtnNewRadioButton_1);
+		rdbtnCash = new JRadioButton();
+		rdbtnCash.setBounds(10, 207, 22, 21);
+		panel2.add(rdbtnCash);
 		
 		ButtonGroup group = new ButtonGroup();
-		group.add(rdbtnNewRadioButton);
-		group.add(rdbtnNewRadioButton_1);
+		group.add(rdbtnCard);
+		group.add(rdbtnCash);
 		
 		JLabel lblNewLabel_4_2 = new JLabel("Credit Card");
 		lblNewLabel_4_2.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -300,6 +303,14 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		lblDelivery.setText(df.format(price[3]));
 		lblTotal.setText(df.format(price[4]));
 		
+		if(user.getSub() > 0) {
+			JLabel lblSubscriber = new JLabel("You are delivery subscriber");
+			lblSubscriber.setFont(new Font("Times New Roman", Font.BOLD, 12));
+			lblSubscriber.setBounds(105, 84, 162, 15);
+			panel2.add(lblSubscriber);
+			
+			lblDelivery.setText("FREE");
+		}
 		
 		ActionListener al = new ActionListener() {
 
@@ -411,6 +422,18 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		}
 	}
 	
+	public JCheckBox getCkDelivery() {
+		return ckDelivery;
+	}
+	
+	public JRadioButton getRdbtnCard() {
+		return rdbtnCard;
+	}
+
+	public JRadioButton getRdbtnCash() {
+		return rdbtnCash;
+	}
+
 	public void checkout() {
 		pwmc.checkout();
 	}

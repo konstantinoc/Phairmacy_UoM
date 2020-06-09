@@ -120,7 +120,7 @@ public class MainFrame extends JFrame {
 						new LoginForm();
 					}
 					else if(e.getSource().equals(toProfile)){
-						changePanel(new ProfileGUI(user));
+						changePanel(new ProfileGUI(getMe(), user));
 					}
 					else if(e.getSource().equals(toStore)) {
 						changePanel(new StoreGUI(getMe(),user));

@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class User {
-	private String id;
+	private int id;
 	private String name;
 	private String surname;
 	private String email;
@@ -16,13 +16,14 @@ public class User {
 	private int isPharmacist;
 	private Cart cart;
 	private int points;
+	private int sub;
 	
 	public User(String id) {		
 		ResultSet rs = receiveCustomerData(id);
 		cart = new Cart(this);
 		try {
 			while(rs.next()) {
-				this.id = rs.getString("user_id");
+				this.id = rs.getInt("user_id");
 				this.name = rs.getString("name");
 				this.surname = rs.getString("surname");
 				this.email = rs.getString("email");
@@ -33,6 +34,7 @@ public class User {
 				this.birthday = rs.getString("date_of_birth");
 				this.points = rs.getInt("points");
 				this.isPharmacist = rs.getInt("isPharmacist");
+				this.sub = rs.getInt("subscription");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -60,7 +62,7 @@ public class User {
 		PreparedStatement ps = null;
 		
 		try {
-			ps = connection.prepareStatement("UPDATE pharmacy.customers SET name = ?, surname = ?, email = ?, address = ?, city = ?, postal_code = ?, phone = ?, date_of_birth = ?, points = ? WHERE (user_id = ?);");
+			ps = connection.prepareStatement("UPDATE pharmacy.customers SET name = ?, surname = ?, email = ?, address = ?, city = ?, postal_code = ?, phone = ?, date_of_birth = ?, points = ?, subscription = ? WHERE (user_id = ?);");
 			ps.setString(1, this.name);
 			ps.setString(2, this.surname);
 			ps.setString(3, this.email);
@@ -69,7 +71,9 @@ public class User {
 			ps.setString(6, this.postal);
 			ps.setString(7, this.phone);
 			ps.setString(8, this.birthday);
-			ps.setString(9, this.id);
+			ps.setInt(9, this.points);
+			ps.setInt(10, this.sub);
+			ps.setInt(11, this.id);
 
 			ps.executeUpdate();
 
@@ -79,26 +83,8 @@ public class User {
 		}
 		
 	}
-	
-	public void updateCustomerPoints() {
-		DB_Connection objDB = new DB_Connection();
-		Connection connection = objDB.get_connection();
-		PreparedStatement ps = null;
 		
-		try {
-			ps = connection.prepareStatement("UPDATE pharmacy.customers SET points = ? WHERE (user_id = ?);");
-			ps.setInt(1, this.points);
-			ps.setString(2, this.id);
-
-			ps.executeUpdate();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-		
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -142,11 +128,19 @@ public class User {
 		return cart;
 	}
 
-	public long getPoints() {
+	public int getPoints() {
 		return points;
 	}
 
-	public void setId(String id) {
+	public int getSub() {
+		return sub;
+	}
+
+	public void setSub(int sub) {
+		this.sub = sub;
+	}
+
+	public void setId(int id) {
 		this.id = id;
 	}
 

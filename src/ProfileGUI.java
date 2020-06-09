@@ -14,9 +14,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+import javax.swing.JButton;
 
 public class ProfileGUI extends JPanel {
 	private User customer;
+	private MainFrame mainFrame;
 	private final Color backgroundColor = new Color(196, 219, 191);
 
 	private JTextField txtName;
@@ -31,8 +33,10 @@ public class ProfileGUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ProfileGUI(User user) {
+	public ProfileGUI(MainFrame mainFrame, User user) {
 		this.customer = user;
+		this.mainFrame = mainFrame;
+		
 		setBackground(backgroundColor);
 		setLayout(null);
 		setVisible(true);
@@ -91,7 +95,6 @@ public class ProfileGUI extends JPanel {
 		txtName.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 		txtName.setColumns(10);
 		
-		
 		txtSurname = new JTextField(user.getSurname());
 		txtSurname.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		txtSurname.setEditable(false);
@@ -115,7 +118,6 @@ public class ProfileGUI extends JPanel {
 		txtCity.setBounds(92, 135, 206, 19);
 		panel.add(txtCity);
 		txtCity.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-
 		
 		txtPostal = new JTextField(user.getPostal());
 		txtPostal.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -124,7 +126,6 @@ public class ProfileGUI extends JPanel {
 		txtPostal.setBounds(92, 170, 206, 19);
 		panel.add(txtPostal);
 		txtPostal.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-
 		
 		txtPhone = new JTextField(user.getPhone());
 		txtPhone.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -133,7 +134,6 @@ public class ProfileGUI extends JPanel {
 		txtPhone.setBounds(92, 205, 206, 19);
 		panel.add(txtPhone);
 		txtPhone.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-
 		
 		txtEmail = new JTextField(user.getEmail());
 		txtEmail.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -142,7 +142,6 @@ public class ProfileGUI extends JPanel {
 		txtEmail.setBounds(92, 240, 206, 19);
 		panel.add(txtEmail);
 		txtEmail.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-
 		
 		txtBirthday = new JTextField(user.getBirthday());
 		txtBirthday.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -162,7 +161,32 @@ public class ProfileGUI extends JPanel {
 		lblNewLabel_9.setIcon(new ImageIcon(ProfileGUI.class.getResource("/icons/save.png")));
 		lblNewLabel_9.setBounds(268, 327, 32, 39);
 		panel.add(lblNewLabel_9);
-
+		
+		JLabel lblOrderHistory = new JLabel("");
+		lblOrderHistory.setIcon(new ImageIcon(ProfileGUI.class.getResource("/icons/history.png")));
+		lblOrderHistory.setBounds(236, 523, 128, 136);
+		add(lblOrderHistory);
+		
+		JLabel lblNewLabel_10 = new JLabel("Orders History");
+		lblNewLabel_10.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		lblNewLabel_10.setBounds(246, 669, 118, 21);
+		add(lblNewLabel_10);
+		
+		JLabel lblSubscription = new JLabel("");
+		lblSubscription.setIcon(new ImageIcon(ProfileGUI.class.getResource("/icons/subscription.png")));
+		lblSubscription.setBounds(512, 523, 128, 136);
+		add(lblSubscription);
+		
+		JLabel lblNewLabel_10_1 = new JLabel("Delivery Subscriptions");
+		lblNewLabel_10_1.setIcon(null);
+		lblNewLabel_10_1.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		lblNewLabel_10_1.setBounds(493, 669, 175, 21);
+		add(lblNewLabel_10_1);
+		
+		if(user.getIsPharmacist() == 1) {
+			lblOrderHistory.setVisible(false);
+		}
+		
 		MouseListener mouseListener = new MouseListener() {
 
 			@Override
@@ -201,6 +225,12 @@ public class ProfileGUI extends JPanel {
 					user.setBirthday(txtBirthday.getText());
 					
 				}
+				else if(e.getSource().equals(lblOrderHistory)) {
+					mainFrame.changePanel(new OrderHistoryGUI(mainFrame, user));
+				}
+				else if(e.getSource().equals(lblSubscription)) {
+					mainFrame.changePanel(new SubscriptionGUI(mainFrame, user));
+				}
 			}
 
 			@Override
@@ -218,7 +248,7 @@ public class ProfileGUI extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				if (e.getSource().equals(lblNewLabel_8) && lblNewLabel_8.isEnabled() || 
-						e.getSource().equals(lblNewLabel_9) && lblNewLabel_9.isEnabled())
+						e.getSource().equals(lblNewLabel_9) && lblNewLabel_9.isEnabled() || e.getSource().equals(lblOrderHistory) || e.getSource().equals(lblSubscription))
 					setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
@@ -228,7 +258,8 @@ public class ProfileGUI extends JPanel {
 			}
 			
 		};
-		
+		lblSubscription.addMouseListener(mouseListener);
+		lblOrderHistory.addMouseListener(mouseListener);
 		lblNewLabel_8.addMouseListener(mouseListener);
 		lblNewLabel_9.addMouseListener(mouseListener);
 	}

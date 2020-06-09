@@ -30,25 +30,6 @@ public class Product {
 		this.description = description;
 		//this.ingredient = ingredient;
 	}
-	
-//	public boolean enoughQty(int id, int qty) {
-//		Product p = null;
-//		DB_Connection objDB = new DB_Connection();
-//		Connection connection = objDB.get_connection();
-//		PreparedStatement ps = null;
-//		try {
-//			String query = "SELECT qty FROM products WHERE id = " + id + ";";
-//			ps = connection.prepareStatement(query);
-//			ResultSet rs = ps.executeQuery();
-//			
-//			if(rs.next()) {
-//				
-//			}
-//		}catch(Exception e) {
-//			System.out.println(e);
-//		}
-//		return true;
-//	}
 
 	public void editProduct(float price, String name, int qty, String description) {
 		DB_Connection objDB = new DB_Connection();

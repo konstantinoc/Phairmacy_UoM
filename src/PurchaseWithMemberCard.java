@@ -1,7 +1,10 @@
-import java.awt.Component;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
@@ -85,8 +88,14 @@ public class PurchaseWithMemberCard {
 		}
 		if(isRedeemPoints)
 			total[1] = calculateDiscoundFromPoints(total[2]);
-		if(isDelivery)
-			total[3] = (float) 2.50;
+		if(isDelivery) {
+			if (user.getSub() == 0)
+				total[3] = (float) 2.50;
+			else {
+				total[3] = (float) 0.00;
+			}
+		}
+			
 		
 		total[4] = (float)(total[0] - total[1] - total[2] + total[3]);
 		this.total = total;
@@ -116,24 +125,54 @@ public class PurchaseWithMemberCard {
 				break;
 			}
 			else {
-				callPaymentGui();
+				if(gui.getRdbtnCard().isSelected())
+					callPaymentGui();
 				completeOrder();
 				}
 		}
 	}
 	
 	public void completeOrder() {
-		int result = this.pmnt.getResult();
-		Cart cart = user.getCart();
+		int result = 1;
+		if(gui.getRdbtnCard().isSelected()) {
+			result = this.pmnt.getResult(); 
+		}
 		if (result == 1) {
+			Cart cart = user.getCart();
+			
+			Date d = new Date();  
+		    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
+		    String date = formatter.format(d);
+			
+		    Order order = null;
+		    int id = 0;
+		    
+			int pmntMethod = 0;
+			if(gui.getRdbtnCard().isSelected()) {
+				pmntMethod = 1;
+			}
+			int delivery = 0;
+			if(gui.getCkDelivery().isSelected()) {
+				delivery = 1;
+			}
 			for (int i=0; i<user.getCart().cartSize(); i++) {
-				Product currentProduct = cart.getProductList().get(i);
+				Product currentProduct = cart.getProductList().get(i); 
 				int currentQty = cart.getQtyList().get(i);
+				if(i==0) {
+					order = new Order(user.getId(), currentProduct.getId(), currentQty, date, currentProduct.getPrice() * currentQty, delivery ,pmntMethod );
+					id = order.getId();
+				}else {
+					order = new Order(id,user.getId(), currentProduct.getId(), currentQty, date, currentProduct.getPrice() * currentQty, delivery ,pmntMethod, 0 );
+				}
+					
+				System.out.println( String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+				order.addOrder();
+				
 				currentProduct.setQty(currentProduct.getQty() - currentQty);
 				currentProduct.editQty();
 			}
 			user.setPoints((int) (user.getPoints() + (this.total[4] / 1) - (this.total[1] / 0.10)));
-			user.updateCustomerPoints();
+			user.updateCustomerData();
 			user.getCart().removeAll();
 			gui.getMainFrame().RefreshNavMenu();
 			JOptionPane.showMessageDialog(gui, "ORDER SUCCESFUL","Succesful operation", JOptionPane.INFORMATION_MESSAGE);
