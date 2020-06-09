@@ -12,6 +12,21 @@ public class Order {
 	private int delivery;
 	private int payment_method;
 	private int confirm;
+	private int auto_id;
+	
+	public Order(int id,int customer_id, int product_id, int qty, String date, float cost, int delivery,
+			int payment_method, int confirm, int auto_id) {
+		this.id = id;
+		this.customer_id = customer_id;
+		this.product_id = product_id;
+		this.qty = qty;
+		this.date = date;
+		this.cost = cost;
+		this.delivery = delivery;
+		this.payment_method = payment_method;
+		this.confirm = confirm;
+		this.auto_id = auto_id;
+	}
 	
 	public Order(int id,int customer_id, int product_id, int qty, String date, float cost, int delivery,
 			int payment_method, int confirm) {
@@ -60,13 +75,25 @@ public class Order {
 		}
 	}
 	
+	public void updateOrder() {
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		try {
+			ps = connection.prepareStatement("UPDATE pr_order SET confirm = " + this.confirm + " WHERE auto_id = " + this.auto_id + ";");	
+			ps.executeUpdate();
+		}catch(Exception e){
+			System.out.println(e);
+		}
+	}
+	
 	private int createId() {
 		int id = 0;
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		try {
-			String query = "SELECT * FROM pr_order";
+			String query = "SELECT * FROM pr_order ORDER BY id DESC";
 			ps = connection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()){
@@ -114,6 +141,10 @@ public class Order {
 
 	public int getConfirm() {
 		return confirm;
+	}
+
+	public void setConfirm(int confirm) {
+		this.confirm = confirm;
 	}
 	
 	

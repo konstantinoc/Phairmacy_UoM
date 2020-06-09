@@ -108,7 +108,7 @@ public class OrderHistoryGUI extends JPanel {
 			orders = new ArrayList<>();
 			Order order = null;
 			while (rs.next()){
-				order = new Order(rs.getInt("id"), rs.getInt("customer_id"), rs.getInt("product_id"), rs.getInt("qty"), rs.getString("date"), rs.getFloat("cost"), rs.getInt("delivery"), rs.getInt("payment_method"), rs.getInt("confirm"));
+				order = new Order(rs.getInt("id"), rs.getInt("customer_id"), rs.getInt("product_id"), rs.getInt("qty"), rs.getString("date"), rs.getFloat("cost"), rs.getInt("delivery"), rs.getInt("payment_method"), rs.getInt("confirm"), rs.getInt("auto_id"));
 				orders.add(order);
 			}
 			Collections.reverse(orders);

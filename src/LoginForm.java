@@ -214,7 +214,7 @@ public class LoginForm extends JFrame {
 				if (rs.next() == false) {
 					return "Username and password dont match at any entry";
 				}
-				new MainFrame(new User(rs.getString("id")));
+				new MainFrame(new User(rs.getInt("id")));
 				dispose();
 			}catch (Exception e) {
 				System.out.println(e);
@@ -467,9 +467,9 @@ public class LoginForm extends JFrame {
 					ps = connection.prepareStatement(query);
 					ResultSet rs = ps.executeQuery();
 					
-					String id = null;
+					int id = -1;
 					while(rs.next()) {
-						id = rs.getString("id");
+						id = rs.getInt("id");
 					}
 					
 					query = "INSERT INTO pharmacy.customers (user_id, email, isPharmacist) VALUES (" + id + ",'" + txtEmail_1.getText().trim() + "','" + 0 +"');";

@@ -18,7 +18,7 @@ public class User {
 	private int points;
 	private int sub;
 	
-	public User(String id) {		
+	public User(int id) {		
 		ResultSet rs = receiveCustomerData(id);
 		cart = new Cart(this);
 		try {
@@ -41,7 +41,7 @@ public class User {
 		}
 	}
 	
-	private ResultSet receiveCustomerData(String id) {
+	private ResultSet receiveCustomerData(int id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;

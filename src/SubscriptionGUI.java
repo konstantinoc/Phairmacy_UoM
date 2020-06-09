@@ -142,7 +142,7 @@ public class SubscriptionGUI extends JPanel {
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
 				
 			}
 

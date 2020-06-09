@@ -46,8 +46,7 @@ public class MainFrame extends JFrame {
 		if (user.getIsPharmacist() == 0)
 			changePanel(new StoreGUI(this,user));	
 		else
-			//changePanel(new AdminMenuPanel());
-			changePanel(new StoreGUI(this, user));
+			changePanel(new AdminMenuGUI(this, user));
 	}
 	
 	public void RefreshNavMenu() {
