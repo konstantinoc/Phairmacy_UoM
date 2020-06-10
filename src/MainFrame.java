@@ -104,10 +104,17 @@ public class MainFrame extends JFrame {
 			points.setBounds((int) (screenSize.getWidth()-50)-400, 10, 80, 64);
 			add(points);
 			
+			JLabel toMenu = new JLabel("");
+			toMenu.setIcon(new ImageIcon(NavMenu.class.getResource("/icons/menu.png")));
+			toMenu.setBounds((int) (screenSize.getWidth()-50)-270, 10, 50, 64);
+			toMenu.setVisible(false);
+			add(toMenu);
+			
 			if(user.getIsPharmacist() == 1) {
 				toCart.setVisible(false);
 				toProfile.setBounds((int) (screenSize.getWidth()-50)-90, 10, 32, 64);
 				points.setVisible(false);
+				toMenu.setVisible(true);
 			}
 		
 			MouseListener mouseListener = new MouseListener() {
@@ -126,6 +133,9 @@ public class MainFrame extends JFrame {
 					}
 					else if(e.getSource().equals(toCart)) {
 						changePanel(new CartGUI(getMe(),user));
+					}
+					else if(e.getSource().equals(toMenu)) {
+						changePanel(new AdminMenuGUI(getMe(),user));
 					}
 					
 				}
@@ -155,6 +165,7 @@ public class MainFrame extends JFrame {
 			toCart.addMouseListener(mouseListener);
 			toStore.addMouseListener(mouseListener);
 			logout.addMouseListener(mouseListener);
+			toMenu.addMouseListener(mouseListener);
 		}	
 	}
 }

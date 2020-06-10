@@ -1,4 +1,3 @@
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -165,7 +164,6 @@ public class PurchaseWithMemberCard {
 					order = new Order(id,user.getId(), currentProduct.getId(), currentQty, date, currentProduct.getPrice() * currentQty, delivery ,pmntMethod, 0 );
 				}
 					
-				System.out.println( String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 				order.addOrder();
 				
 				currentProduct.setQty(currentProduct.getQty() - currentQty);

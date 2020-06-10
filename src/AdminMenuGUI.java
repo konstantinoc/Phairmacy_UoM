@@ -29,12 +29,38 @@ public class AdminMenuGUI extends JPanel {
 		lblNewLabel_1.setBounds(282, 373, 74, 21);
 		add(lblNewLabel_1);
 		
+		JLabel lblSupply = new JLabel("");
+		lblSupply.setIcon(new ImageIcon(AdminMenuGUI.class.getResource("/icons/supply.png")));
+		lblSupply.setBounds(638, 124, 261, 238);
+		add(lblSupply);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Supply Report");
+		lblNewLabel_1_1.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		lblNewLabel_1_1.setBounds(713, 372, 116, 21);
+		add(lblNewLabel_1_1);
+		
+		JLabel lblStore = new JLabel("");
+		lblStore.setIcon(new ImageIcon(AdminMenuGUI.class.getResource("/icons/storemng.png")));
+		lblStore.setBounds(1049, 125, 261, 238);
+		add(lblStore);
+		
+		JLabel lblNewLabel_1_1_1 = new JLabel("Store Management");
+		lblNewLabel_1_1_1.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		lblNewLabel_1_1_1.setBounds(1117, 373, 155, 21);
+		add(lblNewLabel_1_1_1);
+		
 		MouseListener ms = new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource().equals(lblOrders)) {
 					mainFrame.changePanel(new AdminOrderHistory(mainFrame, user));
+				}
+				else if(e.getSource().equals(lblStore)) {
+					mainFrame.changePanel(new StoreGUI(mainFrame, user));
+				}
+				else if (e.getSource().equals(lblSupply)) {
+					new Supply(mainFrame);
 				}
 			}
 
@@ -62,6 +88,8 @@ public class AdminMenuGUI extends JPanel {
 			
 		};
 		lblOrders.addMouseListener(ms);
+		lblStore.addMouseListener(ms);
+		lblSupply.addMouseListener(ms);
 
 	}	
 }

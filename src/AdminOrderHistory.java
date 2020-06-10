@@ -143,6 +143,7 @@ public class AdminOrderHistory extends JPanel {
 						if(confirm == JOptionPane.YES_OPTION){ 
 							o.setConfirm(-1);
 							o.updateOrder();
+							
 							mainFrame.changePanel(new AdminOrderHistory(mainFrame, user));
 						}
 					}
@@ -208,7 +209,7 @@ public class AdminOrderHistory extends JPanel {
 			orders = new ArrayList<>();
 			Order order = null;
 			while (rs.next()){
-				order = new Order(rs.getInt("id"), rs.getInt("customer_id"), rs.getInt("product_id"), rs.getInt("qty"), rs.getString("date"), rs.getFloat("cost"), rs.getInt("delivery"), rs.getInt("payment_method"), rs.getInt("confirm"), rs.getInt("auto_id"));
+				order = new Order(rs.getInt("id"), rs.getInt("customer_id"), rs.getInt("product_id"), rs.getInt("qty"), rs.getString("order_date"), rs.getFloat("cost"), rs.getInt("delivery"), rs.getInt("payment_method"), rs.getInt("confirm"), rs.getInt("auto_id"));
 				orders.add(order);
 			}
 		} catch (SQLException e) {

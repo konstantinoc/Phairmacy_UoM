@@ -51,7 +51,6 @@ public class Order {
 		this.cost = cost;
 		this.delivery = delivery;
 		this.payment_method = payment_method;
-		this.confirm = confirm;
 	}
 	
 	public void addOrder() {
@@ -59,7 +58,7 @@ public class Order {
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		try {
-			ps = connection.prepareStatement("INSERT INTO pr_order (id, customer_id, product_id, qty, date, cost, delivery, payment_method) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+			ps = connection.prepareStatement("INSERT INTO pr_order (id, customer_id, product_id, qty, order_date, cost, delivery, payment_method) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
 			ps.setInt(1, this.id);
 			ps.setInt(2, this.customer_id);
 			ps.setInt(3, this.product_id);

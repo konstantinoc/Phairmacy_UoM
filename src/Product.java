@@ -21,6 +21,27 @@ public class Product {
 		this.description = description;
 		//this.ingredient = ingredient;
 	}
+	
+	public Product(int id) {
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		try {
+			String query = "SELECT * FROM products WHERE id = " + id;
+			ps = connection.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()){
+				this.id = id;
+				this.price = rs.getFloat("price");
+				this.name = rs.getString("name");
+				this.qty = rs.getInt("qty");
+				this.img = rs.getString("img");
+				this.description = rs.getString("description");
+			}
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+	}
 
 	public Product(float price, String name, int qty, String img, String description) {
 		this.price = price + 0.00F;
@@ -105,6 +126,24 @@ public class Product {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public int lastYearSales(int month, int year) {
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		int total = 0;
+		try {
+			String query = "SELECT * FROM pr_order WHERE product_id = " + this.id + " AND order_date LIKE \"%/%" + month + "/" + year + "\";";
+			ps = connection.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()){
+				total += rs.getInt("qty");
+			}
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		return total;
 	}
 	
 	
