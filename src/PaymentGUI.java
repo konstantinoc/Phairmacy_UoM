@@ -19,15 +19,15 @@ public class PaymentGUI extends JPanel {
 		setLayout(null);
 		
 		btnSuccesful = new JButton("Succesful");
-		btnSuccesful.setBounds(174, 56, 193, 23);
+		btnSuccesful.setBounds(628, 132, 193, 23);
 		add(btnSuccesful);
 		
 		btnUnsuccesful = new JButton("Unsucceful");
-		btnUnsuccesful.setBounds(174, 92, 193, 23);
+		btnUnsuccesful.setBounds(628, 168, 193, 23);
 		add(btnUnsuccesful);
 		
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(174, 126, 193, 23);
+		btnCancel.setBounds(628, 202, 193, 23);
 		add(btnCancel);
 		
 		ActionListener al = new ActionListener() {
@@ -55,6 +55,7 @@ public class PaymentGUI extends JPanel {
 			this.result = 0;
 		}
 		pwmc.completeOrder();
+
 	}
 	
 	public int getResult() {

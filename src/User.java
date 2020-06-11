@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class User {
 	private int id;
@@ -17,6 +18,7 @@ public class User {
 	private Cart cart;
 	private int points;
 	private int sub;
+	private ArrayList<String> allergies;
 	
 	public User(int id) {		
 		ResultSet rs = receiveCustomerData(id);
@@ -35,6 +37,7 @@ public class User {
 				this.points = rs.getInt("points");
 				this.isPharmacist = rs.getInt("isPharmacist");
 				this.sub = rs.getInt("subscription");
+				this.allergies = getUserAllergies(id); 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -82,6 +85,52 @@ public class User {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void updateCustomerAllergies() {
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		
+		try {
+			for(String a:allergies) {
+				ps = connection.prepareStatement("SELECT * FROM user_allergie WHERE customer_id = ? AND allergie_name = ?;");
+				ps.setInt(1, this.id);
+				ps.setString(2, a);
+				ResultSet rs = ps.executeQuery();
+				if(!rs.next()) {
+					ps = connection.prepareStatement("INSERT INTO user_allergie (customer_id, allergie_name) VALUES(?, ?);");
+					ps.setInt(1, this.id);
+					ps.setString(2, a);
+					ps.executeUpdate();
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
+	public ArrayList<String> getUserAllergies(int id){
+		ArrayList<String> allergies = new ArrayList<>();
+		DB_Connection objDB = new DB_Connection();
+		Connection connection = objDB.get_connection();
+		PreparedStatement ps = null;
+		
+		try {
+			String query = "SELECT * FROM user_allergie WHERE customer_id = " + this.id +";";
+			ps = connection.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()){
+				allergies.add(rs.getString("allergie_name"));
+			}
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		return allergies;
 	}
 		
 	public int getId() {
@@ -136,6 +185,14 @@ public class User {
 		return sub;
 	}
 
+	public ArrayList<String> getAllergies() {
+		return allergies;
+	}
+
+	public void setAllergies(ArrayList<String> allergies) {
+		this.allergies = allergies;
+	}
+
 	public void setSub(int sub) {
 		this.sub = sub;
 	}
@@ -183,9 +240,4 @@ public class User {
 	public void setPoints(int points) {
 		this.points = points;
 	}
-	
-	
-	
-	
-	
 }

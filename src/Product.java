@@ -10,18 +10,8 @@ public class Product {
 	private int qty;
 	private String img;
 	private String description;
-	//private Ingredient ingredient;
-	
-	public Product(int id, float price, String name, int qty, String img, String description) {
-		this.id = id;
-		this.price = price + 0.00F;
-		this.name = name;
-		this.qty = qty;
-		this.img = img;
-		this.description = description;
-		//this.ingredient = ingredient;
-	}
-	
+	private String ingredient;
+		
 	public Product(int id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -37,33 +27,36 @@ public class Product {
 				this.qty = rs.getInt("qty");
 				this.img = rs.getString("img");
 				this.description = rs.getString("description");
+				this.ingredient = rs.getString("ingredient");
 			}
 		}catch(Exception e) {
 			System.out.println(e);
 		}
 	}
 
-	public Product(float price, String name, int qty, String img, String description) {
+	public Product(int id, float price, String name, int qty, String img, String description, String ingredient) {
+		this.id = id;
 		this.price = price + 0.00F;
 		this.name = name;
 		this.qty = qty;
 		this.img = img;
 		this.description = description;
-		//this.ingredient = ingredient;
+		this.ingredient = ingredient;
 	}
 
-	public void editProduct(float price, String name, int qty, String description) {
+	public void editProduct(float price, String name, int qty, String description, String ingredient) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
 		try {
-			ps = connection.prepareStatement("UPDATE pharmacy.products SET price = ?, name = ?, qty = ?, description= ? WHERE (id = ?);");
+			ps = connection.prepareStatement("UPDATE pharmacy.products SET price = ?, name = ?, qty = ?, description= ?, ingredient = ? WHERE (id = ?);");
 			ps.setFloat(1, price);
 			ps.setString(2, name);
 			ps.setInt(3, qty);
 			ps.setString(4, description);
-			ps.setInt(5, this.id);
+			ps.setString(5, ingredient);
+			ps.setInt(6, this.id);
 			
 			ps.executeUpdate();
 
@@ -97,12 +90,13 @@ public class Product {
 		PreparedStatement ps = null;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO `pharmacy`.`products` (`price`, `name`, `qty`, `description`) VALUES (?, ?, ?, ?);");
-			ps.setFloat(1, this.price);
-			ps.setString(2, this.name);
-			ps.setInt(3, this.qty);
-			ps.setString(4, this.description);
-			
+			ps = connection.prepareStatement("INSERT INTO `pharmacy`.`products` (`id`,`price`, `name`, `qty`, `description`, `ingredient`) VALUES (?, ?, ?, ?, ?, ?);");
+			ps.setInt(1, this.id);
+			ps.setFloat(2, this.price);
+			ps.setString(3, this.name);
+			ps.setInt(4, this.qty);
+			ps.setString(5, this.description);
+			ps.setString(6, this.ingredient);
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
@@ -173,6 +167,14 @@ public class Product {
 	
 	public String getDescription() {
 		return description;
+	}
+
+	public String getIngredient() {
+		return ingredient;
+	}
+
+	public void setIngredient(String ingredient) {
+		this.ingredient = ingredient;
 	}
 
 	public void setId(int id) {

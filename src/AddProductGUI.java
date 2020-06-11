@@ -18,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class AddProductGUI extends JPanel {
 	MainFrame parent;
+	private JTextField txtId;
 	
 	/**
 	 * Create the panel.
@@ -82,6 +83,19 @@ public class AddProductGUI extends JPanel {
 		txtTitle.setBorder(new LineBorder(Color.black,1));
 		txtPrice.setBorder(new LineBorder(Color.black,1));
 		txtAvailable.setBorder(new LineBorder(Color.black,1));
+		
+		JLabel lblNewLabel = new JLabel("WARNING contains ");
+		lblNewLabel.setForeground(Color.RED);
+		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		lblNewLabel.setBounds(674, 325, 114, 13);
+		add(lblNewLabel);
+		
+		JTextField txtIngredient = new JTextField();
+		txtIngredient.setBackground(null);
+		txtIngredient.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		txtIngredient.setBounds(791, 322, 114, 19);
+		add(txtIngredient);
+		txtIngredient.setColumns(10);
 				
 		add(lblSave);
 		
@@ -106,7 +120,7 @@ public class AddProductGUI extends JPanel {
 				else if (e.getSource().equals(lblSave)) {
 					
 					if(!(txtTitle.getText().isEmpty() || txtPrice.getText().isEmpty() || txtAvailable.getText().isEmpty())){
-						Product pr = new Product(Float.valueOf(txtPrice.getText()), txtTitle.getText(), Integer.valueOf(txtAvailable.getText()), "", textArea.getText());
+						Product pr = new Product(Integer.valueOf(txtId.getText()),Float.valueOf(txtPrice.getText()), txtTitle.getText(), Integer.valueOf(txtAvailable.getText()), "", textArea.getText(),txtIngredient.getText());
 						pr.addProduct();
 						
 						txtTitle.setEditable(false);
@@ -164,11 +178,21 @@ public class AddProductGUI extends JPanel {
 				System.out.println(e);
 		}
 		lblImg.setBorder(new LineBorder(Color.black,1));
+		
+		JLabel lblNewLabel_1 = new JLabel("ID");
+		lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		lblNewLabel_1.setBounds(674, 198, 45, 13);
+		add(lblNewLabel_1);
+		
+		txtId = new JTextField();
+		txtId.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		txtId.setBackground(null);
+		txtId.setBounds(721, 196, 96, 19);
+		add(txtId);
+		txtId.setColumns(10);
+		
 	}
-	
-	
 	public void hideMe() {
 		this.setVisible(false);
 	}
-
 }

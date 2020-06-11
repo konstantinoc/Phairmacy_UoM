@@ -119,10 +119,27 @@ public class ProductGUI extends JPanel {
 		lblDelete.setBounds(740, 264, 32, 39);
 		lblDelete.setEnabled(true);
 		
+		JLabel lblNewLabel = new JLabel("WARNING contains ");
+		lblNewLabel.setForeground(Color.RED);
+		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		lblNewLabel.setBounds(674, 325, 114, 13);
+		add(lblNewLabel);
+		
+		JTextField txtIngredient = new JTextField(product.getIngredient());
+		txtIngredient.setBackground(null);
+		txtIngredient.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		txtIngredient.setBounds(791, 322, 114, 19);
+		txtIngredient.setEditable(false);
+		txtIngredient.setBorder(null);
+		txtIngredient.setForeground(Color.RED);
+		add(txtIngredient);
+		txtIngredient.setColumns(10);
+		
 		if(user.getIsPharmacist() == 1) {
 			txtTitle.setBorder(new LineBorder(Color.black,1));
 			txtPrice.setBorder(new LineBorder(Color.black,1));
 			txtAvailable.setBorder(new LineBorder(Color.black,1));
+			txtIngredient.setBorder(new LineBorder(Color.black,1));
 			
 			lblNewLabel_4.setVisible(false);
 			spinner.setVisible(false);
@@ -155,6 +172,7 @@ public class ProductGUI extends JPanel {
 					txtPrice.setEditable(true);
 					txtAvailable.setEditable(true);
 					textArea.setEditable(true);
+					txtIngredient.setEditable(true);
 				}
 				else if (e.getSource().equals(lblSave)) {
 					lblEdit.setEnabled(true);
@@ -164,8 +182,9 @@ public class ProductGUI extends JPanel {
 					txtPrice.setEditable(false);
 					txtAvailable.setEditable(false);
 					textArea.setEditable(false);
+					txtIngredient.setEditable(false);
 					
-					product.editProduct(Float.valueOf(txtPrice.getText()), txtTitle.getText(), Integer.valueOf(txtAvailable.getText()), textArea.getText());
+					product.editProduct(Float.valueOf(txtPrice.getText()), txtTitle.getText(), Integer.valueOf(txtAvailable.getText()), textArea.getText(), txtIngredient.getText());
 				}
 				else if(e.getSource().equals(lblDelete)) {
 					int confirm = JOptionPane.showConfirmDialog(parent,"Are you sure you want to delete this product?");  

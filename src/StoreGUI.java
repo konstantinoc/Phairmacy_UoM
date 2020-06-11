@@ -53,18 +53,31 @@ public class StoreGUI extends JPanel {
 			ps = connection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()){
-				productsList.add(new Product(rs.getInt("id"),rs.getFloat("price"),rs.getString("name"),rs.getInt("qty"),rs.getString("img"), rs.getString("description")));
+				productsList.add(new Product(rs.getInt("id")));
 			}
 		}catch(Exception e) {
 			System.out.println(e);
 		}
 		
 		JLabel lbladdProduct = new JLabel();
+		JLabel lblAddCoupon = new JLabel();
+		JLabel lblRemoveCoupon = new JLabel();
+		
 		if(user.getIsPharmacist() == 1) {
 			lbladdProduct.setIcon(new ImageIcon(StoreGUI.class.getResource("/icons/plus.png")));
 			lbladdProduct.setText("Add Product");
 			lbladdProduct.setBounds(10, 10, 120, 35);
 			add(lbladdProduct);
+			
+			lblAddCoupon.setIcon(new ImageIcon(StoreGUI.class.getResource("/icons/plus.png")));
+			lblAddCoupon.setText("Add Coupon");
+			lblAddCoupon.setBounds(130, 10, 120, 35);
+			add(lblAddCoupon);
+			
+			lblRemoveCoupon.setIcon(new ImageIcon(StoreGUI.class.getResource("/icons/plus.png")));
+			lblRemoveCoupon.setText("Remove Coupon");
+			lblRemoveCoupon.setBounds(250, 10, 140, 35);
+			add(lblRemoveCoupon);		
 		}
 		
 		txtSearch = new JTextField();
@@ -195,6 +208,12 @@ public class StoreGUI extends JPanel {
 					else if(e.getSource().equals(txtSearch) && txtSearch.getText().equals("Search")) {
 						txtSearch.setText(null);
 					}
+					else if(e.getSource().equals(lblAddCoupon)) {
+						parent.changePanel(new AddCouponGUI(parent));
+					}
+					else if(e.getSource().equals(lblRemoveCoupon)) {
+						parent.changePanel(new CouponsGUI(parent, user));
+					}
 				}
 
 				@Override
@@ -228,7 +247,8 @@ public class StoreGUI extends JPanel {
 			txtSearch.addMouseListener(ml);
 			btnSearch.addMouseListener(ml);
 			lbladdProduct.addMouseListener(ml);
-			
+			lblAddCoupon.addMouseListener(ml);
+			lblRemoveCoupon.addMouseListener(ml);
 			lblNext.addMouseListener(ml);
 			lblBack.addMouseListener(ml);
 			lblAddToCart.addMouseListener(ml);

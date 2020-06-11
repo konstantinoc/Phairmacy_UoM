@@ -1,4 +1,3 @@
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -15,5 +14,4 @@ public class DB_Connection {
 		}
 		return connection;
 	}
-
 }

@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 public class PurchaseWithMemberCardGUI extends JPanel {
-	private JTextField textField;
+	private JTextField txtCoupon;
 	
 	private final Color btnColor = new Color(23, 128 ,0);
 	private final Color formColor = new Color(196, 219, 191);
@@ -201,12 +201,12 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		ckDelivery.setBounds(6, 79, 93, 21);
 		panel2.add(ckDelivery);
 		
-		textField = new JTextField();
-		textField.setBackground(null);
-		textField.setBounds(125, 110, 96, 19);
-		textField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-		panel2.add(textField);
-		textField.setColumns(10);
+		txtCoupon = new JTextField();
+		txtCoupon.setBackground(null);
+		txtCoupon.setBounds(125, 110, 96, 19);
+		txtCoupon.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+		panel2.add(txtCoupon);
+		txtCoupon.setColumns(10);
 		
 		JLabel lblCheckCode = new JLabel("");
 		lblCheckCode.setIcon(new ImageIcon(PurchaseWithMemberCardGUI.class.getResource("/icons/book.png")));
@@ -296,7 +296,7 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		btnCheckout.setBounds(300, 196, 140, 36);
 		panel2.add(btnCheckout);
 		
-		float[] price = pwmc.calculateTotal(ckRedeemPoints.isSelected(), ckDelivery.isSelected(), textField.getText());		
+		float[] price = pwmc.calculateTotal(ckRedeemPoints.isSelected(), ckDelivery.isSelected(), txtCoupon.getText());		
 		lblCost.setText(df.format(price[0]));
 		lblPoints.setText(df.format(price[1]));
 		lblDiscound.setText(df.format(price[2]));
@@ -316,7 +316,7 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				float[] price = pwmc.calculateTotal(ckRedeemPoints.isSelected(), ckDelivery.isSelected(), textField.getText());
+				float[] price = pwmc.calculateTotal(ckRedeemPoints.isSelected(), ckDelivery.isSelected(), txtCoupon.getText());
 				lblCost.setText(df.format(price[0]));
 				lblPoints.setText(df.format(price[1]));
 				lblDiscound.setText(df.format(price[2]));
@@ -331,7 +331,7 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(e.getSource().equals(lblCheckCode)){
-					float[] price = pwmc.calculateTotal(ckRedeemPoints.isSelected(), ckDelivery.isSelected(), textField.getText());
+					float[] price = pwmc.calculateTotal(ckRedeemPoints.isSelected(), ckDelivery.isSelected(), txtCoupon.getText());
 					lblCost.setText(df.format(price[0]));
 					lblPoints.setText(df.format(price[1]));
 					lblDiscound.setText(df.format(price[2]));
@@ -422,6 +422,11 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		}
 	}
 	
+	
+	public JTextField getTxtCoupon() {
+		return txtCoupon;
+	}
+
 	public JCheckBox getCkDelivery() {
 		return ckDelivery;
 	}

@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class Supply{
 	private ArrayList<Product> products;
@@ -22,7 +23,6 @@ public class Supply{
 			LocalDateTime now = LocalDateTime.now(); 
 			int month = Integer.valueOf(String.valueOf(dtf.format(now).charAt(3))+String.valueOf(dtf.format(now).charAt(4)))+1;
 			int year = Integer.valueOf((String.valueOf(dtf.format(now).charAt(6))+String.valueOf(dtf.format(now).charAt(7))+String.valueOf(dtf.format(now).charAt(8))+String.valueOf(dtf.format(now).charAt(9))))-1;
-			System.out.println(month + ", "+ year);
 		    
 			JFileChooser chooser = new JFileChooser(); 
 		    chooser.setCurrentDirectory(new java.io.File("."));
@@ -42,8 +42,7 @@ public class Supply{
 				writer.write("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|");
 				writer.write(System.lineSeparator());
 				fetchProducts();
-				for(Product p:products) {
-					
+				for(Product p:products) {					
 					if(p.lastYearSales(month,year)-p.getQty() > 0) {
 						writer.write("|"+p.getName());
 						for(int i=0; i<=18-p.getName().length();i++)
@@ -61,6 +60,7 @@ public class Supply{
 					}
 				}
 				writer.close();
+				JOptionPane.showMessageDialog(mainFrame, "Supply Report exported succesfuly", "Succesful", JOptionPane.INFORMATION_MESSAGE);
 		    }
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -86,8 +86,6 @@ public class Supply{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
 	}
-
 }

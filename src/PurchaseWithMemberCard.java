@@ -29,7 +29,7 @@ public class PurchaseWithMemberCard {
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		try {
-			String query = "SELECT * FROM coupons WHERE code = \"" + code + "\";";
+			String query = "SELECT * FROM coupons WHERE c_code = \"" + code + "\";";
 			ps = connection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			
@@ -64,12 +64,20 @@ public class PurchaseWithMemberCard {
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		try {
-			String query = "SELECT * FROM coupons WHERE code = \"" + code + "\";";
+			String query = "SELECT * FROM coupons WHERE c_code = \"" + code + "\";";
 			ps = connection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next() == false)
 				return false;
+			System.out.println(rs.getInt("id"));
+			query = "SELECT * FROM customer_coupon WHERE customer_id = " + user.getId() + " AND coupon_id = " + rs.getInt("id")  + ";";
+			ps = connection.prepareStatement(query);
+			rs = ps.executeQuery();
+			if (rs.next() == false) {
+				JOptionPane.showMessageDialog(gui, "You dont own this coupon. You can get it at coupon tab in your Profile.", "Error", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 			return true;
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -118,16 +126,40 @@ public class PurchaseWithMemberCard {
 			Product currentProduct = cart.getProductList().get(i);
 			int currentQty = cart.getQtyList().get(i);
 			
-			if(currentProduct.getQty() < currentQty) {
-				JOptionPane.showMessageDialog(gui, "ORDER UNSUCCESFUL\nNo enough quantity in stock!\nAvailable:" + currentProduct.getQty(),"Unsuccesful operation", JOptionPane.ERROR_MESSAGE);
-				gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(),user));
-				break;
-			}
-			else {
-				if(gui.getRdbtnCard().isSelected())
-					callPaymentGui();
-				completeOrder();
+			boolean has_allergie = false;
+			for(String a:user.getAllergies()) {
+				if(a.equals(currentProduct.getIngredient())) {
+					has_allergie = true;
+					break;
 				}
+			}
+			int confirm = 0 ;
+			if(has_allergie){
+				confirm = JOptionPane.showConfirmDialog(gui,"You have an allergie to the product " + currentProduct.getName() + "\nDo you want to continue? NOT RECOMMENDED", "",JOptionPane.ERROR_MESSAGE);  
+			}
+			if((confirm == JOptionPane.YES_OPTION) || (!has_allergie)){
+				if(currentProduct.getQty() < currentQty) {
+					JOptionPane.showMessageDialog(gui, "ORDER UNSUCCESFUL\nNo enough quantity in stock!\nAvailable:" + currentProduct.getQty(),"Unsuccesful operation", JOptionPane.ERROR_MESSAGE);
+					gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(),user));
+					break;
+				}
+				else {
+					if(user.getPostal().startsWith("54")) {
+						if(gui.getRdbtnCard().isSelected() || gui.getRdbtnCash().isSelected()) {
+							if(gui.getRdbtnCard().isSelected())
+								callPaymentGui();
+							completeOrder();
+						}else {
+							JOptionPane.showMessageDialog(gui, "Please choose payment method", "", JOptionPane.WARNING_MESSAGE);
+						}
+					}else {
+						JOptionPane.showMessageDialog(gui, "We dont support delivery at your location.Sorry!", "", JOptionPane.WARNING_MESSAGE);
+						gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(),user));
+					}
+				}
+			}
+			else
+				gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(), user));
 		}
 	}
 	
@@ -173,6 +205,13 @@ public class PurchaseWithMemberCard {
 			user.updateCustomerData();
 			user.getCart().removeAll();
 			gui.getMainFrame().RefreshNavMenu();
+			try {
+				coupon o = new coupon(gui.getTxtCoupon().getText());
+				System.out.println("sff " + o.getId());
+				o.useCoupon(user.getId());
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			JOptionPane.showMessageDialog(gui, "ORDER SUCCESFUL","Succesful operation", JOptionPane.INFORMATION_MESSAGE);
 			gui.getMainFrame().changePanel(new StoreGUI(gui.getMainFrame(),user));
 		}
@@ -180,6 +219,5 @@ public class PurchaseWithMemberCard {
 			JOptionPane.showMessageDialog(gui, "ORDER UNSUCCESFUL","Unsuccesful operation", JOptionPane.ERROR_MESSAGE);
 			gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(),user));
 		}
-	}
-	
+	}	
 }

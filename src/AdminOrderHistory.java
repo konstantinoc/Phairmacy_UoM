@@ -114,15 +114,19 @@ public class AdminOrderHistory extends JPanel {
 			lblNewLabel_4_3.setHorizontalAlignment(SwingConstants.CENTER);
 			add(lblNewLabel_4_3);
 			
+			
 			JLabel lblAccept = new JLabel("");
 			lblAccept.setIcon(new ImageIcon(AdminOrderHistory.class.getResource("/icons/confirm.png")));
 			lblAccept.setBounds(1268, y-5, 28, 30);
-			add(lblAccept);
 			
 			JLabel lblDecline = new JLabel("");
 			lblDecline.setIcon(new ImageIcon(AdminOrderHistory.class.getResource("/icons/decline.png")));
 			lblDecline.setBounds(1313, y-5, 28, 30);
-			add(lblDecline);
+			
+			if(o.getConfirm() == 0) {
+				add(lblAccept);
+				add(lblDecline);
+			}
 			
 			y += 25;
 			

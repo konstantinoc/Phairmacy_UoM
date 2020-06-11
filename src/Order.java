@@ -144,7 +144,5 @@ public class Order {
 
 	public void setConfirm(int confirm) {
 		this.confirm = confirm;
-	}
-	
-	
+	}	
 }

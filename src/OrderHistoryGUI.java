@@ -117,5 +117,4 @@ public class OrderHistoryGUI extends JPanel {
 		}
 		
 	}
-
 }

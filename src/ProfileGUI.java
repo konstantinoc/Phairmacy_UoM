@@ -4,17 +4,16 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-import javax.swing.JButton;
 
 public class ProfileGUI extends JPanel {
 	private User customer;
@@ -183,8 +182,49 @@ public class ProfileGUI extends JPanel {
 		lblNewLabel_10_1.setBounds(493, 669, 175, 21);
 		add(lblNewLabel_10_1);
 		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 6, true));
+		panel_1.setBounds(873, 85, 326, 376);
+		add(panel_1);
+		
+		DefaultListModel model = new DefaultListModel() ;
+		
+		for(String a:user.getAllergies()) {
+			model.addElement(a);
+			}
+		
+		JList listView = new JList();
+		listView.setBounds(13, 10, 303, 313);
+		listView.setModel(model);
+		panel_1.add(listView);
+		
+		JLabel lblAddAllergie = new JLabel("");
+		lblAddAllergie.setIcon(new ImageIcon(ProfileGUI.class.getResource("/icons/plus.png")));
+		lblAddAllergie.setBounds(141, 333, 36, 33);
+		panel_1.add(lblAddAllergie);
+		
+		JLabel lblCoupons = new JLabel("");
+		lblCoupons.setIcon(new ImageIcon(ProfileGUI.class.getResource("/icons/coupon_code.png")));
+		lblCoupons.setBounds(790, 523, 128, 136);
+		add(lblCoupons);
+		
+		JLabel lblNewLabel_10_1_1 = new JLabel("Buy Coupon Codes with points");
+		lblNewLabel_10_1_1.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		lblNewLabel_10_1_1.setBounds(745, 669, 218, 21);
+		add(lblNewLabel_10_1_1);
+		
 		if(user.getIsPharmacist() == 1) {
+			panel.setBounds(600, 85, 326, 376);
+			
 			lblOrderHistory.setVisible(false);
+			lblSubscription.setVisible(false);
+			lblCoupons.setVisible(false);
+			lblNewLabel_10.setVisible(false);
+			lblNewLabel_10_1.setVisible(false);
+			lblNewLabel_10_1_1.setVisible(false);
+			
+			panel_1.setVisible(false);
 		}
 		
 		MouseListener mouseListener = new MouseListener() {
@@ -231,6 +271,27 @@ public class ProfileGUI extends JPanel {
 				else if(e.getSource().equals(lblSubscription)) {
 					mainFrame.changePanel(new SubscriptionGUI(mainFrame, user));
 				}
+				else if (e.getSource().equals(lblAddAllergie)) {
+					String allergie = JOptionPane.showInputDialog(mainFrame,"Enter the name of the ingredient you are allergic to.\n WARNING !!! Be careful about spelling"); 
+					boolean not_found = true;
+					for(String a:user.getAllergies()) {
+						if (a.equals(allergie)){
+							not_found = false;
+							break;
+						}
+					}
+					if(not_found) {
+						user.getAllergies().add(allergie);
+						user.updateCustomerAllergies();
+						mainFrame.changePanel(new ProfileGUI(mainFrame, user));
+					}
+					else {
+						JOptionPane.showMessageDialog(mainFrame, "You have already added this allergi", "", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				else if(e.getSource().equals(lblCoupons)) {
+					mainFrame.changePanel(new CouponsGUI(mainFrame, user));
+				}
 			}
 
 			@Override
@@ -247,8 +308,6 @@ public class ProfileGUI extends JPanel {
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if (e.getSource().equals(lblNewLabel_8) && lblNewLabel_8.isEnabled() || 
-						e.getSource().equals(lblNewLabel_9) && lblNewLabel_9.isEnabled() || e.getSource().equals(lblOrderHistory) || e.getSource().equals(lblSubscription))
 					setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
@@ -258,6 +317,9 @@ public class ProfileGUI extends JPanel {
 			}
 			
 		};
+		
+		lblCoupons.addMouseListener(mouseListener);
+		lblAddAllergie.addMouseListener(mouseListener);
 		lblSubscription.addMouseListener(mouseListener);
 		lblOrderHistory.addMouseListener(mouseListener);
 		lblNewLabel_8.addMouseListener(mouseListener);

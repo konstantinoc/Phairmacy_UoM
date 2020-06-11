@@ -33,7 +33,7 @@ public class CartGUI extends JPanel {
 		
 		JPanel total = new JPanel(null);
 		total.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
-		total.setBounds(1100, 73, 390, 200);
+		total.setBounds(1100, 73, 390, 130);
 		add(total);
 		
 		JLabel lblNewLabel_2 = new JLabel("Items("+ user.getCart().cartSize() + ")");
@@ -46,7 +46,7 @@ public class CartGUI extends JPanel {
 		lblNewLabel_3.setBounds(270, 27, 159, 13);
 		total.add(lblNewLabel_3);
 		
-		JButton btnPurchaseWithCard = new JButton("Purchase with member card");
+		JButton btnPurchaseWithCard = new JButton("Purchase");
 		if (user.getCart().cartSize() > 0) {
 			btnPurchaseWithCard.setEnabled(true);
 			btnPurchaseWithCard.setBackground(btnColor);
@@ -58,18 +58,6 @@ public class CartGUI extends JPanel {
 		
 		btnPurchaseWithCard.setForeground(color2);
 		total.add(btnPurchaseWithCard);
-		
-		JButton btnPurchase = new JButton("Purchase ");
-		if (user.getCart().cartSize() > 0) {
-			btnPurchase.setEnabled(true);
-			btnPurchase.setBackground(btnColor);
-		}
-		else
-			btnPurchase.setEnabled(false);
-		btnPurchase.setFont(new Font("SansSerif", Font.BOLD, 15));
-		btnPurchase.setBounds(10, 134, 370, 34);
-		btnPurchase.setForeground(color2);
-		total.add(btnPurchase);
 		
 		if (user.getCart().cartSize() == 0){
 			JLabel lblNewLabel_1 = new JLabel("Your cart is empty");
