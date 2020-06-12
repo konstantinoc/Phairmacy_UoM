@@ -70,7 +70,6 @@ public class PurchaseWithMemberCard {
 			
 			if (rs.next() == false)
 				return false;
-			System.out.println(rs.getInt("id"));
 			query = "SELECT * FROM customer_coupon WHERE customer_id = " + user.getId() + " AND coupon_id = " + rs.getInt("id")  + ";";
 			ps = connection.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -215,9 +214,10 @@ public class PurchaseWithMemberCard {
 			JOptionPane.showMessageDialog(gui, "ORDER SUCCESFUL","Succesful operation", JOptionPane.INFORMATION_MESSAGE);
 			gui.getMainFrame().changePanel(new StoreGUI(gui.getMainFrame(),user));
 		}
-		else if (result == -1) {
+		else if ((result == -1)|| result == 2){
 			JOptionPane.showMessageDialog(gui, "ORDER UNSUCCESFUL","Unsuccesful operation", JOptionPane.ERROR_MESSAGE);
 			gui.getMainFrame().changePanel(new CartGUI(gui.getMainFrame(),user));
 		}
+		
 	}	
 }

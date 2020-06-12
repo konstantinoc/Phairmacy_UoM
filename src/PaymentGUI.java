@@ -52,7 +52,7 @@ public class PaymentGUI extends JPanel {
 			this.result = -1;
 		}
 		else if (e.getSource().equals(btnCancel)) {
-			this.result = 0;
+			this.result = 2;
 		}
 		pwmc.completeOrder();
 
