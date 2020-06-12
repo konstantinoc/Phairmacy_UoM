@@ -11,7 +11,8 @@ public class Product {
 	private String img;
 	private String description;
 	private String ingredient;
-		
+	
+	//searches in the database for the product using its id and creates a new object using its data.
 	public Product(int id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -33,7 +34,8 @@ public class Product {
 			System.out.println(e);
 		}
 	}
-
+	
+	//creates a new object using the arguments.
 	public Product(int id, float price, String name, int qty, String img, String description, String ingredient) {
 		this.id = id;
 		this.price = price + 0.00F;
@@ -44,13 +46,14 @@ public class Product {
 		this.ingredient = ingredient;
 	}
 
+	//edits a product in the database
 	public void editProduct(float price, String name, int qty, String description, String ingredient) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
 		try {
-			ps = connection.prepareStatement("UPDATE pharmacy.products SET price = ?, name = ?, qty = ?, description= ?, ingredient = ? WHERE (id = ?);");
+			ps = connection.prepareStatement("UPDATE products SET price = ?, name = ?, qty = ?, description= ?, ingredient = ? WHERE (id = ?);");
 			ps.setFloat(1, price);
 			ps.setString(2, name);
 			ps.setInt(3, qty);
@@ -66,6 +69,7 @@ public class Product {
 		}
 	}
 	
+	//update only the qty of a product in the database
 	public void editQty() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -84,13 +88,14 @@ public class Product {
 		}
 	}
 	
+	//adds a product in the database.
 	public void addProduct() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO `pharmacy`.`products` (`id`,`price`, `name`, `qty`, `description`, `ingredient`) VALUES (?, ?, ?, ?, ?, ?);");
+			ps = connection.prepareStatement("INSERT INTO products (id, price, name, qty, description, ingredient) VALUES (?, ?, ?, ?, ?, ?);");
 			ps.setInt(1, this.id);
 			ps.setFloat(2, this.price);
 			ps.setString(3, this.name);
@@ -106,13 +111,14 @@ public class Product {
 		
 	}
 	
+	//removes a product from the database.
 	public void removeProduct() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
 		try {
-			ps = connection.prepareStatement("DELETE FROM `pharmacy`.`products` WHERE (`id` = ?);");
+			ps = connection.prepareStatement("DELETE FROM products WHERE (id = ?);");
 			ps.setInt(1, this.id);
 			
 			ps.executeUpdate();
@@ -122,6 +128,7 @@ public class Product {
 		}
 	}
 	
+	//calculates the sales of a product of the month and the year of the arguments.
 	public int lastYearSales(int month, int year) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();

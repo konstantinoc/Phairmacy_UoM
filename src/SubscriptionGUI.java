@@ -14,7 +14,8 @@ public class SubscriptionGUI extends JPanel {
 	private User user;
 	private MainFrame mainFrame;
 	/**
-	 * Create the panel.
+	 * Create the panel subscription.
+	 * customer can by a subscription for free delivery.
 	 */
 	public SubscriptionGUI(MainFrame mainFrame,User user) {
 		this.user = user;
@@ -116,6 +117,7 @@ public class SubscriptionGUI extends JPanel {
 				if(user.getPoints() >= 150) {
 					int confirm = JOptionPane.showConfirmDialog(mainFrame,"Are you sure you want to buy this subscription for " + points + " points?");  
 					if(confirm == JOptionPane.YES_OPTION){  
+						//update the customer's points and subscription days.
 						user.setPoints(user.getPoints() - points);
 						user.setSub(user.getSub() + days);
 						user.updateCustomerData();

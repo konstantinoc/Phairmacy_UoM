@@ -22,6 +22,7 @@ public class AddProductGUI extends JPanel {
 	
 	/**
 	 * Create the panel.
+	 * Pharmacist can add Product though this panel.
 	 */
 	public AddProductGUI(MainFrame parent, User user) {
 		this.parent = parent;
@@ -108,6 +109,7 @@ public class AddProductGUI extends JPanel {
 					parent.changePanel(new StoreGUI(parent,user));
 				}
 				else if(e.getSource().equals(lblImg)){
+					//opens a file chooser to select an image
 					JFileChooser chooser = new JFileChooser();
 				    FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				        "JPG, PNG & GIF Images", "jpg", "gif", "png");
@@ -118,8 +120,9 @@ public class AddProductGUI extends JPanel {
 				    }
 				}
 				else if (e.getSource().equals(lblSave)) {
-					
+					//checks if he pharmacist filled all the fields.
 					if(!(txtTitle.getText().isEmpty() || txtPrice.getText().isEmpty() || txtAvailable.getText().isEmpty())){
+						//creates a new object Product
 						Product pr = new Product(Integer.valueOf(txtId.getText()),Float.valueOf(txtPrice.getText()), txtTitle.getText(), Integer.valueOf(txtAvailable.getText()), "", textArea.getText(),txtIngredient.getText());
 						pr.addProduct();
 						
@@ -166,6 +169,7 @@ public class AddProductGUI extends JPanel {
 		lblImg.addMouseListener(ms);
 		
 		try {
+			//changes the dimensions of the image
 			ImageIcon originalIcon = new ImageIcon();
 			Image originalImage = originalIcon.getImage();
 			Image modImage = originalImage.getScaledInstance(300, 300, Image.SCALE_SMOOTH);

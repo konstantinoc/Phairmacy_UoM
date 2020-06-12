@@ -12,6 +12,7 @@ public class AdminMenuGUI extends JPanel {
 	private User user;
 	/**
 	 * Create the panel.
+	 * Pharmacist can navigate to specials panels.
 	 */
 	public AdminMenuGUI(MainFrame mainFrame, User user) {
 		this.mainFrame = mainFrame;

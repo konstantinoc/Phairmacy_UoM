@@ -47,7 +47,7 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 	private PurchaseWithMemberCard pwmc;
 	
 	/**
-	 * Create the panel.
+	 * Create the panel Purchase with member card.
 	 */
 	public PurchaseWithMemberCardGUI(MainFrame mainFrame,User user) {
 		this.user = user;
@@ -303,6 +303,7 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		lblDelivery.setText(df.format(price[3]));
 		lblTotal.setText(df.format(price[4]));
 		
+		//if customer bought a subscription for free delivery.
 		if(user.getSub() > 0) {
 			JLabel lblSubscriber = new JLabel("You are delivery subscriber");
 			lblSubscriber.setFont(new Font("Times New Roman", Font.BOLD, 12));
@@ -372,6 +373,7 @@ public class PurchaseWithMemberCardGUI extends JPanel {
 		ckDelivery.addActionListener(al);
 	}
 	
+	//shows the cart but customer cant edit it is this step.
 	public void showProductsInCart() {
 		int x = 32; 
 		for (int i = 0; i < user.getCart().cartSize(); i++) {

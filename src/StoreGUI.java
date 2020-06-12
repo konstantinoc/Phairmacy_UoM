@@ -26,7 +26,7 @@ public class StoreGUI extends JPanel {
 	private JTextField txtSearch;
 	private final Color backgroundColor = new Color(196, 219, 191);
 	/**
-	 * Create the panel.
+	 * Create the panel for store.
 	 */
 	public StoreGUI(MainFrame parent, User user) {
 		this.parent = parent;
@@ -39,6 +39,7 @@ public class StoreGUI extends JPanel {
 		fetchProducts(1);
 	}
 
+	//fetches 10 by 10 the items from the database accordingly at which page user view right now.
 	private void fetchProducts(int page) {
 		this.removeAll();
 		this.repaint();
@@ -143,6 +144,8 @@ public class StoreGUI extends JPanel {
 			JLabel lblEditProduct = new JLabel("");
 			lblEditProduct.setVisible(false);
 			
+			// if user is pharmacist when he click on the product he can edit it.
+			// if user is customer when he click on it he adds it in his cart.
 			if(user.getIsPharmacist() == 0) {
 				lblAddToCart.setVisible(true);
 				lblAddToCart.setIcon(new ImageIcon(StoreGUI.class.getResource("/icons/add_cart_l.png")));
@@ -156,6 +159,7 @@ public class StoreGUI extends JPanel {
 				panel1.add(lblEditProduct);
 			}
 			
+			//change lines for the last 5 items in the page.
 			if (product < 5 )
 				panel1.setBounds(x, 65, 200, 285);
 			else if (product == 5) {

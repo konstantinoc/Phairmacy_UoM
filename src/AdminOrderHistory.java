@@ -20,6 +20,7 @@ public class AdminOrderHistory extends JPanel {
 	private ArrayList<Order> orders;
 	/**
 	 * Create the panel.
+	 * Pharmacist can see the orders. Can Accept or decline them.
 	 */
 	public AdminOrderHistory(MainFrame mainFrame, User user) {
 		this.user = user;
@@ -61,9 +62,11 @@ public class AdminOrderHistory extends JPanel {
 		lblNewLabel_2_1.setBounds(1060, 44, 72, 18);
 		add(lblNewLabel_2_1);
 		
+		//fetches the orders from the database
 		fetchOrders();
 		
 		int y = 85;
+		//for each order
 		for(Order o:orders) {	
 			User customer = new User(o.getCustomer_id());
 			
@@ -128,6 +131,7 @@ public class AdminOrderHistory extends JPanel {
 				add(lblDecline);
 			}
 			
+			//change the y location to the "next line"
 			y += 25;
 			
 			MouseListener ms = new MouseListener() {
@@ -135,6 +139,7 @@ public class AdminOrderHistory extends JPanel {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getSource().equals(lblAccept)) {
+						// pharmacist accepts or declines an order
 						int confirm = JOptionPane.showConfirmDialog(mainFrame,"Are you sure you want to ACCEPT this order?");  
 						if(confirm == JOptionPane.YES_OPTION){ 
 							o.setConfirm(1);
@@ -181,12 +186,13 @@ public class AdminOrderHistory extends JPanel {
 		}
 	}
 	
-	
+	//fetches the name of a product using its id
 	public String getProductName(int id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
+		//searches in the database to find the id and gets its name
 		String query = "SELECT name FROM products WHERE id = " + id;
 		try {
 			ps = connection.prepareStatement(query);
@@ -201,17 +207,20 @@ public class AdminOrderHistory extends JPanel {
 		return "Product is not found";
 	}
 	
+	//fetches the orders from the database
 	public void fetchOrders() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
+		//searches in the database to find all orders sorted descending
 		String query = "SELECT * FROM pr_order ORDER BY id DESC";
 		try {
 			ps = connection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			orders = new ArrayList<>();
 			Order order = null;
+			//adds all the orders in the ArrayList
 			while (rs.next()){
 				order = new Order(rs.getInt("id"), rs.getInt("customer_id"), rs.getInt("product_id"), rs.getInt("qty"), rs.getString("order_date"), rs.getFloat("cost"), rs.getInt("delivery"), rs.getInt("payment_method"), rs.getInt("confirm"), rs.getInt("auto_id"));
 				orders.add(order);

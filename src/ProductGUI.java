@@ -20,7 +20,9 @@ import javax.swing.border.LineBorder;
 public class ProductGUI extends JPanel {
 	private MainFrame parent;
 	/**
-	 * Create the panel.
+	 * Create the panel of the product.
+	 * customer can use it to view the product and to add it in his cart.
+	 * phairmacist can use it to edit the product's details or delete the product.
 	 */
 	public ProductGUI(MainFrame parent,Product product, User user) {
 		this.parent = parent;

@@ -24,7 +24,8 @@ public class CartGUI extends JPanel {
 	
 	private static DecimalFormat df = new DecimalFormat("0.00");
 	/**
-	 * Create the panel.
+	 * Create the panel cart.
+	 * Customer can view the products that he want to buy.
 	 */
 	
 	public CartGUI(MainFrame parent,User user) {
@@ -47,12 +48,15 @@ public class CartGUI extends JPanel {
 		total.add(lblNewLabel_3);
 		
 		JButton btnPurchaseWithCard = new JButton("Purchase");
+		
+		//if the cart is empty customer can't continue to the purchase
 		if (user.getCart().cartSize() > 0) {
 			btnPurchaseWithCard.setEnabled(true);
 			btnPurchaseWithCard.setBackground(btnColor);
 		}
 		else
 			btnPurchaseWithCard.setEnabled(false);
+		
 		btnPurchaseWithCard.setFont(new Font("SansSerif", Font.BOLD, 15));
 		btnPurchaseWithCard.setBounds(10, 76, 370, 34);
 		
@@ -67,6 +71,7 @@ public class CartGUI extends JPanel {
 		}
 		
 		int x = 80; 
+		// for each product in the cart creates anew panel for its details.
 		for (int i = 0; i < user.getCart().cartSize(); i++) {
 			Product currentP = user.getCart().getProductList().get(i);
 			
@@ -78,6 +83,7 @@ public class CartGUI extends JPanel {
 			panel.setBounds(100, x, 803, 112);
 			add(panel);
 			panel.setLayout(null);
+			//set the position for the next product's panel.
 			x +=112;
 			
 			JLabel lblImage = new JLabel();
@@ -113,6 +119,7 @@ public class CartGUI extends JPanel {
 			panel.add(lblDelete);
 			
 			try {
+				//resize the image.
 				ImageIcon originalIcon = new ImageIcon(StoreGUI.class.getResource("/img/" + currentP.getImg()));
 				Image originalImage = originalIcon.getImage();
 				Image modImage = originalImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -136,6 +143,7 @@ public class CartGUI extends JPanel {
 					}
 					else if(e.getSource().equals(lblRefresh)) {
 						try {
+							//changes the qty of a product
 							user.getCart().changeProductQty(currentP,Integer.valueOf(txtQty.getText()));
 							parent.changePanel(new CartGUI(parent,user));
 							JOptionPane.showMessageDialog(parent, "Quantity change succesfuly","Succesful operation", JOptionPane.INFORMATION_MESSAGE);

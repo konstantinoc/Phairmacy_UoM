@@ -19,6 +19,7 @@ public class AddCouponGUI extends JPanel {
 
 	/**
 	 * Create the panel.
+	 * pharmacist can add coupon though this panel.
 	 */
 	public AddCouponGUI(MainFrame mainFrame) {
 		setLayout(null);
@@ -92,14 +93,17 @@ public class AddCouponGUI extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				//checks if all the fields filled.
 				if(txtCode.getText().isEmpty() || txtProductId.getText().isEmpty() || txtDiscount.getText().isEmpty() || 
 						txtMin.getText().isEmpty() || txtTitle.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(mainFrame, "Please fill all field", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
+					//creates new a new object coupons  
 					coupon c = new coupon(txtCode.getText(), Integer.valueOf(txtProductId.getText()), Float.valueOf(txtDiscount.getText()), 
 							Integer.valueOf(txtMin.getText()), txtTitle.getText(), Integer.valueOf(txtPoints.getText()));
 					int r = c.addCoupon();
+					//checks if the code is already exist.
 					if(r==1)
 						JOptionPane.showMessageDialog(mainFrame, "Coupon added succesful", "Succesful", JOptionPane.INFORMATION_MESSAGE);
 					else

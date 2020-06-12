@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 
 public class DB_Connection {
 	
+	//connects the the system to the database
 	public Connection get_connection(){
 		Connection connection = null;
 		try {

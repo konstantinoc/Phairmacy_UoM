@@ -20,6 +20,7 @@ public class User {
 	private int sub;
 	private ArrayList<String> allergies;
 	
+	//finds the user with this id in database and creates an object user with his data.
 	public User(int id) {		
 		ResultSet rs = receiveCustomerData(id);
 		cart = new Cart(this);
@@ -44,6 +45,7 @@ public class User {
 		}
 	}
 	
+	//gets the data of a user from the database.
 	private ResultSet receiveCustomerData(int id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -59,13 +61,14 @@ public class User {
 		return null;
 	}
 	
+	//updates user data in the database
 	public void updateCustomerData() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
 		try {
-			ps = connection.prepareStatement("UPDATE pharmacy.customers SET name = ?, surname = ?, email = ?, address = ?, city = ?, postal_code = ?, phone = ?, date_of_birth = ?, points = ?, subscription = ? WHERE (user_id = ?);");
+			ps = connection.prepareStatement("UPDATE customers SET name = ?, surname = ?, email = ?, address = ?, city = ?, postal_code = ?, phone = ?, date_of_birth = ?, points = ?, subscription = ? WHERE (user_id = ?);");
 			ps.setString(1, this.name);
 			ps.setString(2, this.surname);
 			ps.setString(3, this.email);
@@ -87,6 +90,7 @@ public class User {
 		
 	}
 	
+	//update customer allergies.
 	public void updateCustomerAllergies() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -94,10 +98,12 @@ public class User {
 		
 		try {
 			for(String a:allergies) {
+				//checks if the customer already has added this allergy.
 				ps = connection.prepareStatement("SELECT * FROM user_allergie WHERE customer_id = ? AND allergie_name = ?;");
 				ps.setInt(1, this.id);
 				ps.setString(2, a);
 				ResultSet rs = ps.executeQuery();
+				//if no its inserts the allergy to the user's data.
 				if(!rs.next()) {
 					ps = connection.prepareStatement("INSERT INTO user_allergie (customer_id, allergie_name) VALUES(?, ?);");
 					ps.setInt(1, this.id);
@@ -112,8 +118,7 @@ public class User {
 		
 	}
 	
-	
-	
+	//gets the allergies from a user in database using his id.
 	public ArrayList<String> getUserAllergies(int id){
 		ArrayList<String> allergies = new ArrayList<>();
 		DB_Connection objDB = new DB_Connection();

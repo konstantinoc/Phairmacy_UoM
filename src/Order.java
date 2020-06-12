@@ -53,6 +53,7 @@ public class Order {
 		this.payment_method = payment_method;
 	}
 	
+	//adds an order to the database
 	public void addOrder() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -74,6 +75,7 @@ public class Order {
 		}
 	}
 	
+	//updates the data in the database
 	public void updateOrder() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -86,6 +88,7 @@ public class Order {
 		}
 	}
 	
+	//finds the last id in the table pr_order and adds 1 to create the new one.
 	private int createId() {
 		int id = 0;
 		DB_Connection objDB = new DB_Connection();

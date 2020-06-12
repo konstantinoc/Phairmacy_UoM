@@ -19,14 +19,20 @@ public class CouponsGUI extends JPanel {
 	private ArrayList<coupon> coupons;
 	/**
 	 * Create the panel.
+	 * Pharmacist can view and remove the coupons.
+	 * Customers can purchase coupons.
 	 */
 	public CouponsGUI(MainFrame mainFrame, User user) {
 		setLayout(null);
 		
+		//the location of the coupon
 		int x = 80; 
 		int y = 80;
+		//fetches the coupons from database
 		this.coupons = fetchCoupons();
 		int counter = 0;
+		
+		//for each coupon
 		for(coupon c:coupons) {
 			if (counter >= 7)
 				y = 330;
@@ -53,6 +59,10 @@ public class CouponsGUI extends JPanel {
 			panel.add(lblNewLabel_1);
 			JButton btnNewButton = new JButton("Buy Coupon");
 			JButton btnRemove = new JButton("Remove Coupon");
+			/**
+			 * if user is pharmacist can remove the coupon
+			 * if user is customer can purchase the coupon
+			 */
 			if(user.getIsPharmacist() == 0) {
 				btnNewButton.setFont(new Font("Dialog", Font.BOLD, 13));
 				btnNewButton.setBounds(10, 175, 155, 34);
@@ -68,7 +78,11 @@ public class CouponsGUI extends JPanel {
 				public void mouseClicked(MouseEvent e) {
 					if(e.getSource().equals(btnNewButton)) {
 						int confirm = JOptionPane.showConfirmDialog(mainFrame,"Are you sure you want buy this coupon?");  
-						if(confirm == JOptionPane.YES_OPTION){  
+						if(confirm == JOptionPane.YES_OPTION){ 
+							/**
+							 * if customer has enough points coupon, coupon can be purchased for use.
+							 * the user's point decreases.
+							 */
 							if(user.getPoints() > c.getPoints()) {
 								c.buyCoupon(user.getId());
 								user.setPoints(user.getPoints()-c.getPoints());
@@ -85,6 +99,7 @@ public class CouponsGUI extends JPanel {
 					else if(e.getSource().equals(btnRemove)) {
 						int confirm = JOptionPane.showConfirmDialog(mainFrame,"Are you sure you want delete this coupon?");  
 						if(confirm == JOptionPane.YES_OPTION){  
+							//pharmacist remove the coupon from the database
 							c.removeCoupon();
 							JOptionPane.showMessageDialog(mainFrame, "Coupon removed succesfuly", "Succesful operation", JOptionPane.INFORMATION_MESSAGE);
 							mainFrame.changePanel(new CouponsGUI(mainFrame, user));
@@ -125,6 +140,7 @@ public class CouponsGUI extends JPanel {
 
 	}
 	
+	//fetches all coupons from the database
 	public ArrayList<coupon> fetchCoupons() {
 		ArrayList<coupon> coupons = new ArrayList<>();
 		DB_Connection objDB = new DB_Connection();
@@ -132,6 +148,7 @@ public class CouponsGUI extends JPanel {
 		PreparedStatement ps = null;
 		
 		try {
+			//creates a new object coupon which is added to the arrayList
 			String query = "SELECT id FROM coupons;";
 			ps = connection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();

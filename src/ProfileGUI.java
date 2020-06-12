@@ -30,7 +30,10 @@ public class ProfileGUI extends JPanel {
 	private JTextField txtBirthday;
 
 	/**
-	 * Create the panel.
+	 * Create the panel Profile.
+	 * Users can edit their infos.
+	 * If the user is customer can move to order history panel, subscription panel and coupons panel.
+	 * He can add his allergies.
 	 */
 	public ProfileGUI(MainFrame mainFrame, User user) {
 		this.customer = user;
@@ -242,6 +245,7 @@ public class ProfileGUI extends JPanel {
 					txtPhone.setEditable(true);
 					txtBirthday.setEditable(true);
 					txtEmail.setEditable(true);
+					
 				}
 				if(e.getSource().equals(lblNewLabel_9)) {
 					lblNewLabel_8.setEnabled(true);
@@ -264,6 +268,7 @@ public class ProfileGUI extends JPanel {
 					user.setPhone(txtPhone.getText());
 					user.setBirthday(txtBirthday.getText());
 					
+					user.updateCustomerData();
 				}
 				else if(e.getSource().equals(lblOrderHistory)) {
 					mainFrame.changePanel(new OrderHistoryGUI(mainFrame, user));
@@ -273,20 +278,22 @@ public class ProfileGUI extends JPanel {
 				}
 				else if (e.getSource().equals(lblAddAllergie)) {
 					String allergie = JOptionPane.showInputDialog(mainFrame,"Enter the name of the ingredient you are allergic to.\n WARNING !!! Be careful about spelling"); 
-					boolean not_found = true;
-					for(String a:user.getAllergies()) {
-						if (a.equals(allergie)){
-							not_found = false;
-							break;
+					if (allergie != null) {
+						boolean not_found = true;
+						for(String a:user.getAllergies()) {
+							if (a.equals(allergie)){
+								not_found = false;
+								break;
+							}
 						}
-					}
-					if(not_found) {
-						user.getAllergies().add(allergie);
-						user.updateCustomerAllergies();
-						mainFrame.changePanel(new ProfileGUI(mainFrame, user));
-					}
-					else {
-						JOptionPane.showMessageDialog(mainFrame, "You have already added this allergi", "", JOptionPane.ERROR_MESSAGE);
+						if(not_found) {
+							user.getAllergies().add(allergie);
+							user.updateCustomerAllergies();
+							mainFrame.changePanel(new ProfileGUI(mainFrame, user));
+						}
+						else {
+							JOptionPane.showMessageDialog(mainFrame, "You have already added this allergi", "", JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				}
 				else if(e.getSource().equals(lblCoupons)) {

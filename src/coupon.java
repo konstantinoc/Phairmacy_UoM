@@ -23,6 +23,7 @@ public class coupon {
 		this.points = points;
 	}	
 	
+	//it searches from the database the coupon using its id and creates a new Object coupon using its data.
 	public coupon(int id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -46,6 +47,7 @@ public class coupon {
 		}
 	}
 	
+	//it searches from the database the coupon using its code and creates a new Object coupon using its data.
 	public coupon(String code) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -68,6 +70,8 @@ public class coupon {
 			e.printStackTrace();
 		}
 	}
+	
+	//removes a coupon from the database
 	public void removeCoupon() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -85,12 +89,13 @@ public class coupon {
 		}
 	}
 	
+	//removes a coupon bought because the customer used it.
 	public void useCoupon(int customer_id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
 		PreparedStatement ps = null;
 		
-		String query = "DELETE FROM customer_coupon WHERE customer_id = ? AND coupon_id = ?;";
+		String query = "DELETE FROM customer_coupon WHERE customer_id = ? AND coupon_id = ? limit 1;";
 		try {
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, customer_id);
@@ -105,6 +110,7 @@ public class coupon {
 		
 	}
 	
+	// add a  new coupon in the database to be available for purchase by customers.
 	public int addCoupon() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -131,6 +137,7 @@ public class coupon {
 		return 0;
 	}
 	
+	//add in database the purchased coupon for a customer. it mean the customer can use it for discount.
 	public void buyCoupon(int user_id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();

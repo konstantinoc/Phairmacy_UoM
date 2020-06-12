@@ -49,6 +49,7 @@ public class MainFrame extends JFrame {
 			changePanel(new AdminMenuGUI(this, user));
 	}
 	
+	//refreshes the navigation menu
 	public void RefreshNavMenu() {
 		this.remove(panel_1);
 		this.panel_1 = new NavMenu();
@@ -59,6 +60,7 @@ public class MainFrame extends JFrame {
 		return this;
 	}
 	
+	//changes the 2nd panel of the Frame
 	public void changePanel(JPanel child) {
 		this.panel.removeAll();
 		child.setPreferredSize(new Dimension((int) screen.getWidth(), (int) screen.getHeight()-140));
@@ -70,6 +72,8 @@ public class MainFrame extends JFrame {
 	class NavMenu extends JPanel {
 		/**
 		 * Create the panel.
+		 * is the first panel of the frame
+		 * is a navigation menu
 		 */
 		public NavMenu() {
 			setBackground(Color.DARK_GRAY);
@@ -110,6 +114,7 @@ public class MainFrame extends JFrame {
 			toMenu.setVisible(false);
 			add(toMenu);
 			
+			//pharmacist has different menu from the customer
 			if(user.getIsPharmacist() == 1) {
 				toCart.setVisible(false);
 				toProfile.setBounds((int) (screenSize.getWidth()-50)-90, 10, 32, 64);

@@ -15,15 +15,17 @@ import javax.swing.JOptionPane;
 public class Supply{
 	private ArrayList<Product> products;
 	/**
-	 * Create the panel.
+	 * Create the supply report.
 	 */
 	public Supply(MainFrame mainFrame) {
 		try {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			LocalDateTime now = LocalDateTime.now(); 
+			//gets the next month and the last year of the currents.
 			int month = Integer.valueOf(String.valueOf(dtf.format(now).charAt(3))+String.valueOf(dtf.format(now).charAt(4)))+1;
 			int year = Integer.valueOf((String.valueOf(dtf.format(now).charAt(6))+String.valueOf(dtf.format(now).charAt(7))+String.valueOf(dtf.format(now).charAt(8))+String.valueOf(dtf.format(now).charAt(9))))-1;
 		    
+			//pharmacist selects the directory to save the report.
 			JFileChooser chooser = new JFileChooser(); 
 		    chooser.setCurrentDirectory(new java.io.File("."));
 		    chooser.setDialogTitle("Export Supply Report");
@@ -41,8 +43,11 @@ public class Supply{
 				writer.write(System.lineSeparator());
 				writer.write("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|");
 				writer.write(System.lineSeparator());
+				//fetches all products.
 				fetchProducts();
-				for(Product p:products) {					
+				//for each product.
+				for(Product p:products) {			
+					//checks if the last year sales at the next month minus current stock is greater than 0 and adds it to the supply report   
 					if(p.lastYearSales(month,year)-p.getQty() > 0) {
 						writer.write("|"+p.getName());
 						for(int i=0; i<=18-p.getName().length();i++)
@@ -67,6 +72,7 @@ public class Supply{
 		}
 	}
 	
+	//fetches all products from the database.
 	public void fetchProducts() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();

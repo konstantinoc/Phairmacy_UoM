@@ -15,7 +15,7 @@ public class OrderHistoryGUI extends JPanel {
 	private User user;
 	private ArrayList<Order> orders;
 	/**
-	 * Create the panel.
+	 * Create the panel order history for the customer.
 	 */
 	public OrderHistoryGUI(MainFrame mainFrame, User user) {
 		this.user = user;
@@ -42,9 +42,11 @@ public class OrderHistoryGUI extends JPanel {
 		lblNewLabel_3.setBounds(991, 44, 82, 13);
 		add(lblNewLabel_3);
 		
+		//fetches the orders of a customer.
 		fetchOrders();
 		
 		int y = 85;
+		//for each order
 		for(Order o:orders) {			
 			JLabel lblNewLabel_4 = new JLabel(o.getDate());
 			lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -78,6 +80,7 @@ public class OrderHistoryGUI extends JPanel {
 		}
 	}
 	
+	//finds in database the name of a product using its id.
 	public String getProductName(int id) {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -96,6 +99,8 @@ public class OrderHistoryGUI extends JPanel {
 		System.out.println(id);
 		return "Product is not found";
 	}
+	
+	//fetches the orders o the user from the database.
 	public void fetchOrders() {
 		DB_Connection objDB = new DB_Connection();
 		Connection connection = objDB.get_connection();
@@ -107,6 +112,7 @@ public class OrderHistoryGUI extends JPanel {
 			ResultSet rs = ps.executeQuery();
 			orders = new ArrayList<>();
 			Order order = null;
+			//for each order creates an new object which is added in the arraylist.
 			while (rs.next()){
 				order = new Order(rs.getInt("id"), rs.getInt("customer_id"), rs.getInt("product_id"), rs.getInt("qty"), rs.getString("order_date"), rs.getFloat("cost"), rs.getInt("delivery"), rs.getInt("payment_method"), rs.getInt("confirm"), rs.getInt("auto_id"));
 				orders.add(order);

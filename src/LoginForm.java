@@ -30,6 +30,7 @@ public class LoginForm extends JFrame {
 	
 	/**
 	 * Launch the application.
+	 * The purchase and invite friends functions were not implemented in the project.!!!
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -45,6 +46,7 @@ public class LoginForm extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * Includes the login and signup panel 
 	 */
 	public LoginForm() {
 		setVisible(true);
@@ -69,6 +71,10 @@ public class LoginForm extends JFrame {
 		changePanel(new Login());
 	}
 	
+	/**
+	 * takes as an argument the panel 
+	 * the panel you will see on the right is taken as an argument(Login-Signup)
+	 */
 	public void changePanel(JPanel panel) {
 		panel.setBounds(436, 0, 432, 453);
 		contentPane.add(panel);
@@ -81,7 +87,8 @@ public class LoginForm extends JFrame {
 		private JLabel lblLoginError;
 		
 		/**
-		 * Create the panel.
+		 * Create the panel login.
+		 * 
 		 */
 		public Login() {
 			
@@ -198,22 +205,31 @@ public class LoginForm extends JFrame {
 			lblDontHaveAn.addMouseListener(mouseListener);
 		}
 		
+		/**
+		 * hides the panel.
+		 */
 		public void hideMe() {
 			this.setVisible(false);
 		}
 		
+		/*
+		 * undertakes the connection of the user
+		 */
 		private String loginUser() {
 			DB_Connection objDB = new DB_Connection();
 			Connection connection = objDB.get_connection();
 			PreparedStatement ps = null;
 			try {
+				//searches the database if the user exists
 				String query = "SELECT id FROM users WHERE username = \"" + txtUsername.getText().trim() + "\" AND password = \"" + txtPassword.getText() + "\";";
 				ps = connection.prepareStatement(query);
 				ResultSet rs = ps.executeQuery();
 				
+				// if not..
 				if (rs.next() == false) {
 					return "Username and password dont match at any entry";
 				}
+				//if yes creates an Object MainFrame with argument a new Object User 
 				new MainFrame(new User(rs.getInt("id")));
 				dispose();
 			}catch (Exception e) {
@@ -239,7 +255,7 @@ public class LoginForm extends JFrame {
 		private JCheckBox ckbxAgree;
 		
 		/**
-		 * Create the panel.
+		 * Create the panel signup.
 		 */
 		public Signup() {
 			setVisible(true);
@@ -429,11 +445,13 @@ public class LoginForm extends JFrame {
 			btnSignup.addMouseListener(mouseListener);
 			lblAlreadyHaveAn.addMouseListener(mouseListener);
 		}
-		
+		// hides the panel signup
 		public void hideMe() {
 			this.setVisible(false);
 		}
-		
+		/*
+		 * undertakes the registration of the user
+		 */
 		private void signupUser() {
 			lblUsernameError.setText("");
 			lblPasswordError.setText("");
@@ -441,6 +459,7 @@ public class LoginForm extends JFrame {
 			lblEmailError.setText("");
 			lblError.setText("");
 			
+			// checks if the user filled the fills correctly
 			if (!txtPassword_1.getText().trim().equals(txtConfirmPassword_1.getText().trim())){
 				lblNotMatchError.setText("Those passwords didn't macth. Try again!");
 			}
@@ -459,11 +478,13 @@ public class LoginForm extends JFrame {
 				Connection connection = objDB.get_connection();
 				PreparedStatement ps = null;
 				try {
-					String query = "INSERT INTO pharmacy.users (username, password) VALUES ('" + txtUsername_1.getText().trim() + "','" + txtPassword_1.getText().trim() + "');";
+					//adds the user in users table in database
+					String query = "INSERT INTO users (username, password) VALUES ('" + txtUsername_1.getText().trim() + "','" + txtPassword_1.getText().trim() + "');";
 					ps = connection.prepareStatement(query);
 					ps.executeUpdate();
 					
-					query = "SELECT id FROM pharmacy.users WHERE username = \""+ txtUsername_1.getText()+"\";";
+					//gets the id of the user where created by the database
+					query = "SELECT id FROM users WHERE username = \""+ txtUsername_1.getText()+"\";";
 					ps = connection.prepareStatement(query);
 					ResultSet rs = ps.executeQuery();
 					
@@ -472,15 +493,18 @@ public class LoginForm extends JFrame {
 						id = rs.getInt("id");
 					}
 					
-					query = "INSERT INTO pharmacy.customers (user_id, email, isPharmacist) VALUES (" + id + ",'" + txtEmail_1.getText().trim() + "','" + 0 +"');";
+					//adds in customers table in database the user's id, email, and 0 for the field isPharmacist because only customers can signup.  
+					query = "INSERT INTO customers (user_id, email, isPharmacist) VALUES (" + id + ",'" + txtEmail_1.getText().trim() + "','" + 0 +"');";
 					ps = connection.prepareStatement(query);
 					ps.executeUpdate();
 					
+					//creates new object MainFrame with argument an new Object User. 
 					new MainFrame(new User(id));
 					dispose();
 					
 				}catch (Exception e) {
 					System.out.println(e);
+					//if database return error its handles it
 					if (e.toString().contains("username")) {
 						lblUsernameError.setText("Username already exist");
 					}

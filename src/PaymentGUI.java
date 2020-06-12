@@ -12,7 +12,8 @@ public class PaymentGUI extends JPanel {
 	private JButton btnCancel;
 	private PurchaseWithMemberCard pwmc;
 	/**
-	 * Create the panel.
+	 * Create the panel for the payment.
+	 * just 3 buttons.
 	 */
 	public PaymentGUI(PurchaseWithMemberCard pwmc) {
 		this.pwmc = pwmc;
@@ -44,6 +45,7 @@ public class PaymentGUI extends JPanel {
 		btnCancel.addActionListener(al);
 	}
 	
+	//returns which button user pressed
 	public void setResult(ActionEvent e) {
 		if (e.getSource().equals(btnSuccesful)) {
 			this.result = 1;
